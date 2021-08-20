@@ -1,28 +1,40 @@
-<header
->
-<button ngbTooltip="I'll always open to the right" placement="right">Hover me</button>
+<header class="
+    container-fluid
+    d-flex
+    header
+    align-items-center
+    sticky-top
+  ">
+  <div class="
+    d-flex
+    container
+    position-relative
+    justify-content-between
+">
+<a href="/" class="text-decoration-none text-dark h2">
+  <strong>Emporium</strong>
+</a>
+    <form class="col-6">
+      <input type="search" class="form-control form-control-dark search-bar position-relative" placeholder="Search..."
+        aria-label="Search" />
+    </form>
 
-  <!-- <a href="/" class="text-white text-decoration-none text-warning h3">
-    <strong>Name/Logo</strong>
-  </a>
-
-  <form class="col-6">
-    <input
-      type="search"
-      class="form-control form-control-dark"
-      placeholder="Search..."
-      aria-label="Search"
-    />
-  </form>
-
-  <div class="d-flex">
-    <ul class="nav mr-5">
+    <div>
+      <!-- <ul class="nav">
       <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
       <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
       <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-    </ul>
+    </ul> -->
 
-    <button type="button" class="btn btn-outline-light mr-2">Login</button>
-    <button type="button" class="btn btn-warning">Sign-up</button>
-  </div> -->
+      <!-- <button type="button" class="btn btn-outline-light">Login</button> -->
+      <!-- <button type="button" class="btn btn-warning">My Account</button>
+        <button type="button" class="btn btn-warning">Favourites</button>
+        <button type="button" class="btn btn-warning">Cart</button> -->
+        <ul class="nav">
+          <li><a href="#" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faUser"></fa-icon>My Account</a></li>
+          <li><a href="#" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faHeart"></fa-icon>Favourites</a></li>
+          <li><a href="#" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faShoppingCart"></fa-icon>Cart</a></li>
+        </ul>
+    </div>
+  </div>
 </header>

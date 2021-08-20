@@ -29,29 +29,29 @@ export class AuthService {
   }
 
   // Sign in with email/password
-  SignIn(email: string, password: string) {
+  signIn(email: string, password: string) {
     return this.fireAuth.signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.SetUserData(result.user);
+        this.setUserData(result.user);
       }).catch((error) => {
         window.alert(error.message)
       })
   }
 
   // Sign up with email/password
-  SignUp(email:string, password:string) {
+  signUp(email:string, password:string) {
     return this.fireAuth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
         //Send Verification email?
         //this.SendVerificationMail();
-        this.SetUserData(result.user);
+        this.setUserData(result.user);
       }).catch((error) => {
         window.alert(error.message) //TO DO: Do smth with the error message
       })
   }
 
   //Update user Data
-  SetUserData(user: firebase.default.User | null) {
+  setUserData(user: firebase.default.User | null) {
     if (!user) {
       return;
     }
@@ -70,7 +70,7 @@ export class AuthService {
   }
 
   // Sign out 
-  SignOut() {
+  signOut() {
     return this.fireAuth.signOut().then(() => {
       localStorage.removeItem('user');
       this.router.navigateByUrl('/');
