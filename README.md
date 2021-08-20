@@ -1,2 +1,2 @@
-# emporium
+# emporium - online marketplace
  
