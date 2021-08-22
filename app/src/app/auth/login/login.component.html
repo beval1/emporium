@@ -1,2 +1,56 @@
+<div class="w-25 mx-auto bg-white shadow rounded-container">
+  <form [formGroup]="loginForm" (ngSubmit)="loginHandler()" class="container-fluid p-5 m-auto">
+    <h1 class="h3 mb-3 font-weight-normal text-center">Log in</h1>
 
-  
+    <div *ngIf="serviceError" class="alert alert-danger my-2" role="alert">
+      {{ serviceError }}
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-prepend mb-1">
+        <span class="input-group-text"
+          ><fa-icon [icon]="faUser" class=""></fa-icon
+        ></span>
+      </div>
+        <input formControlName="email" class="form-control mb-1" id="emailInput" type="email" placeholder="Email address" />
+    </div>
+
+    <div class="text-danger mb-1 ml-1" *ngIf="hasFieldError(loginForm, 'email', 'required')">
+      Email is required!
+    </div>
+
+    <div class="text-danger mb-1 ml-1" *ngIf="hasFieldError(loginForm, 'email', 'invalid')">
+      Email is invalid!
+    </div>
+
+    <div class="input-group">
+      <div class="input-group-prepend mb-1">
+        <span class="input-group-text"
+          ><fa-icon [icon]="faKey" class=""></fa-icon
+        ></span>
+      </div>
+      <input formControlName="password" class="form-control mb-1" type="password" placeholder="Password" />
+    </div>
+
+    <div class="text-danger mb-1 ml-1" *ngIf="hasFieldError(loginForm, 'password', 'required')">
+      Password is required!
+    </div>
+
+    <button class="btn btn-success btn-block mt-3 w-100" type="submit">Log in</button>
+
+    <hr />
+
+    <ul class="d-flex list-unstyled justify-content-between">
+      <li><a routerLink="/register" class="" type="button">
+          Create new User account
+        </a></li>
+      <li><a routerLink="/register-seller" class="" type="button">
+          Create new Seller account
+        </a></li>
+    </ul>
+    <a routerLink="/forgot-password" class="d-flex justify-content-center" type="button">
+      Forgot password?
+    </a>
+
+  </form>
+</div>

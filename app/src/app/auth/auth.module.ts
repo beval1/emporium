@@ -17,6 +17,6 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     ReactiveFormsModule,
     FontAwesomeModule
-  ]
+  ],
 })
 export class AuthModule { }

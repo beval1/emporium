@@ -18,12 +18,13 @@ export class AuthService {
     public fireAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,  
   ) {    
-    /* Saving user data in localstorage when */
+    /* Saving user data in localstorage when logged in */
     this.fireAuth.authState.subscribe(user => {
+      //logged in
       if (user) {
         this.user = user;
-        //JSON.parse(localStorage.getItem('user'));
       }
+      //if local storage is empty, user is NOT logged IN
       localStorage.setItem('user', JSON.stringify(this.user));
     })
   }
@@ -32,9 +33,9 @@ export class AuthService {
   signIn(email: string, password: string) {
     return this.fireAuth.signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.setUserData(result.user);
-      }).catch((error) => {
-        window.alert(error.message)
+        console.log(result)
+        localStorage.setItem('user', JSON.stringify(result));
+        //this.setUserData(result.user); //update user data
       })
   }
 
@@ -44,9 +45,8 @@ export class AuthService {
       .then((result) => {
         //Send Verification email?
         //this.SendVerificationMail();
-        this.setUserData(result.user);
-      }).catch((error) => {
-        window.alert(error.message) //TO DO: Do smth with the error message
+        //this.setUserData(result.user);
+        console.log(result)
       })
   }
 
@@ -73,8 +73,15 @@ export class AuthService {
   signOut() {
     return this.fireAuth.signOut().then(() => {
       localStorage.removeItem('user');
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl('login');
     })
+  }
+
+  isUserLogged(){
+    if(localStorage.getItem('user')){
+      return true;
+    } 
+    return false;
   }
 
 }

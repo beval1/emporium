@@ -1,1 +1,211 @@
-<p>register works!</p>
+<div class="w-25 mx-auto bg-white shadow rounded-container">
+  <form
+    class="container-fluid p-5 m-auto"
+    [formGroup]="registerForm"
+    (ngSubmit)="registerHandler()"
+  >
+    <h1 class="h3 mb-3 font-weight-normal text-center">Create User account</h1>
+
+    <div *ngIf="serviceError" class="alert alert-danger my-2" role="alert">
+      {{ serviceError }}
+    </div>
+
+    <!-- <label for="personalName" class="form-label">Enter Name</label> -->
+    <div class="input-group">
+      <div class="input-group-prepend mb-1">
+        <span class="input-group-text"
+          ><fa-icon [icon]="faUser" class=""></fa-icon
+        ></span>
+      </div>
+      <input
+        formControlName="personalName"
+        class="form-control mb-1"
+        type="text"
+        placeholder="Personal Name"
+        id="personalName"
+        [ngClass]="{
+          'is-invalid': hasAnyError(registerForm, 'personalName'),
+          'is-valid':
+            !hasAnyError(registerForm, 'personalName') &&
+            isFieldTouched(registerForm, 'personalName')
+        }"
+      />
+    </div>
+
+    <div
+      class="text-danger mb-1 ml-1"
+      *ngIf="hasFieldError(registerForm, 'personalName', 'required')"
+    >
+      Personal name is required!
+    </div>
+
+    <div
+      class="text-danger mb-1 ml-1"
+      *ngIf="hasFieldError(registerForm, 'personalName', 'minlength')"
+    >
+      Personal name must be at least 3 characters long!
+    </div>
+
+    <!-- <label for="mobilePhone" class="form-label">Enter Mobilephone</label> -->
+    <div class="input-group">
+      <div class="input-group-prepend mb-1">
+        <span class="input-group-text"
+          ><fa-icon [icon]="faPhone" class=""></fa-icon
+        ></span>
+      </div>
+      <input
+        formControlName="mobilePhone"
+        class="form-control mb-1"
+        type="text"
+        placeholder="Mobilephone"
+        id="mobilePhone"
+        [ngClass]="{
+          'is-invalid': hasAnyError(registerForm, 'mobilePhone'),
+          'is-valid':
+            !hasAnyError(registerForm, 'mobilePhone') &&
+            isFieldTouched(registerForm, 'mobilePhone')
+        }"
+      />
+    </div>
+
+    <div
+      class="text-danger mb-1 ml-1"
+      *ngIf="hasFieldError(registerForm, 'mobilePhone', 'required')"
+    >
+      Mobilephone is required!
+    </div>
+
+    <div
+      class="text-danger mb-1 ml-1"
+      *ngIf="hasFieldError(registerForm, 'mobilePhone', 'invalidPhone')"
+    >
+      Mobilephone is invalid!
+    </div>
+
+    <!-- <label for="email" class="form-label">Enter Email</label> -->
+    <div class="input-group">
+      <div class="input-group-prepend mb-1">
+        <span class="input-group-text"
+          ><fa-icon [icon]="faEnvelope" class=""></fa-icon
+        ></span>
+      </div>
+      <input
+        formControlName="email"
+        class="form-control mb-1"
+        type="email"
+        placeholder="Email address"
+        id="email"
+        [ngClass]="{
+          'is-invalid': hasAnyError(registerForm, 'email'),
+          'is-valid':
+            !hasAnyError(registerForm, 'email') &&
+            isFieldTouched(registerForm, 'email')
+        }"
+      />
+    </div>
+
+    <div
+      class="text-danger mb-1 ml-1"
+      *ngIf="hasFieldError(registerForm, 'email', 'required')"
+    >
+      Email is required!
+    </div>
+
+    <div
+      class="text-danger mb-1 ml-1"
+      *ngIf="hasFieldError(registerForm, 'email', 'invalidEmail')"
+    >
+      Email is invalid!
+    </div>
+
+    <!-- <label for="password" class="form-label">Enter Password</label> -->
+    <div class="input-group">
+      <div class="input-group-prepend mb-1">
+        <span class="input-group-text"
+          ><fa-icon [icon]="faKey" class=""></fa-icon
+        ></span>
+      </div>
+      <input
+        formControlName="password"
+        class="form-control mb-1"
+        type="password"
+        placeholder="Password"
+        id="password"
+        [ngClass]="{
+          'is-invalid': hasAnyError(registerForm, 'password'),
+          'is-valid':
+            !hasAnyError(registerForm, 'password') &&
+            isFieldTouched(registerForm, 'password')
+        }"
+      />
+    </div>
+
+    <div
+      class="text-danger mb-1 ml-1"
+      *ngIf="hasFieldError(registerForm, 'password', 'required')"
+    >
+      Password is required!
+    </div>
+
+    <div
+      class="text-danger mb-1 ml-1"
+      *ngIf="hasFieldError(registerForm, 'password', 'minlength')"
+    >
+      Password must be at least 8 characters long!
+    </div>
+
+    <!-- <label for="confirmPassword" class="form-label">Confirm Password</label> -->
+    <div class="input-group">
+      <div class="input-group-prepend mb-1">
+        <span class="input-group-text"
+          ><fa-icon [icon]="faKey" class=""></fa-icon
+        ></span>
+      </div>
+      <input
+        formControlName="confirmPassword"
+        class="form-control mb-1"
+        type="password"
+        placeholder="Confirm Password"
+        id="confirmPassword"
+        [ngClass]="{
+          'is-invalid': passwordMissmatch(registerForm, 'notSame') || hasAnyError(registerForm, 'confirmPassword'),
+          'is-valid': !passwordMissmatch(registerForm, 'notSame') && isFieldTouched(registerForm, 'confirmPassword') && !hasFieldError(registerForm, 'confirmPassword', 'required')
+        }"
+      />
+    </div>
+
+    <div
+      class="text-danger mb-1 ml-1"
+      *ngIf="hasFieldError(registerForm, 'confirmPassword', 'required')"
+    >
+      Confirm Password is required!
+    </div>
+
+    <!-- *ngIf="passwordMissmatch(registerForm, 'notSame')" -->
+    <div
+      class="text-danger mb-1 ml-1"
+      *ngIf="passwordMissmatch(registerForm, 'notSame')"
+    >
+      Passwords do not match!
+    </div>
+
+    <button class="btn btn-primary btn-block mt-3 w-100" type="submit">
+      Register
+    </button>
+
+    <hr />
+
+    <a
+      routerLink="/login"
+      class="d-inline-flex justify-content-center text-success mw-100 w-100"
+    >
+      Already have an account?
+    </a>
+    <a
+      routerLink="/login"
+      class="d-inline-flex justify-content-center text-success mw-100 w-100"
+    >
+      Create Seller account
+    </a>
+  </form>
+</div>

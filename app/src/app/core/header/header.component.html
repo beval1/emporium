@@ -31,9 +31,9 @@
         <button type="button" class="btn btn-warning">Favourites</button>
         <button type="button" class="btn btn-warning">Cart</button> -->
         <ul class="nav">
-          <li><a href="#" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faUser"></fa-icon>My Account</a></li>
-          <li><a href="#" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faHeart"></fa-icon>Favourites</a></li>
-          <li><a href="#" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faShoppingCart"></fa-icon>Cart</a></li>
+          <li><a routerLink="/user/profile" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faUser"></fa-icon>My Account</a></li>
+          <li><a routerLink="/favourites" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faHeart"></fa-icon>Favourites</a></li>
+          <li><a routerLink="/cart" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faShoppingCart"></fa-icon>Cart</a></li>
         </ul>
     </div>
   </div>
