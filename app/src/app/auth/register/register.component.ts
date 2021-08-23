@@ -51,9 +51,11 @@ export class RegisterComponent implements OnInit {
 
     const email = this.registerForm.get('email')?.value;
     const password = this.registerForm.get('password')?.value;
+    const mobilePhone = this.registerForm.get('mobilePhone')?.value;
+    const personalName = this.registerForm.get('personalName')?.value;
 
     this.authService
-      .signUp(email, password)
+      .signUpUser(email, password, mobilePhone, personalName)
       .catch((error) => {
         this.serviceError = error.message;
         console.log(error.message)

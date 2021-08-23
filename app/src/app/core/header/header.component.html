@@ -11,7 +11,7 @@
     position-relative
     justify-content-between
 ">
-<a href="/" class="text-decoration-none text-dark h2">
+<a routerLink="/" class="text-decoration-none text-dark h2">
   <strong>Emporium</strong>
 </a>
     <form class="col-6">
@@ -34,6 +34,7 @@
           <li><a routerLink="/user/profile" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faUser"></fa-icon>My Account</a></li>
           <li><a routerLink="/favourites" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faHeart"></fa-icon>Favourites</a></li>
           <li><a routerLink="/cart" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faShoppingCart"></fa-icon>Cart</a></li>
+          <li *ngIf="isUserAdmin()"><a routerLink="/admin" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faCogs"></fa-icon></a></li>
         </ul>
     </div>
   </div>

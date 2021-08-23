@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import { User } from "../shared/interfaces/user";
+import { IUser } from "../shared/interfaces/IUser";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
@@ -11,7 +11,8 @@ import { Observable } from 'rxjs';
 })
 
 export class AuthService {
-  user: firebase.default.User | null = null; // Save logged in user data
+  user: firebase.default.User | null = null; 
+  userRole: string | undefined | null
 
   constructor(
     public fireStore: AngularFirestore,   // Inject Firestore service
@@ -22,66 +23,95 @@ export class AuthService {
     this.fireAuth.authState.subscribe(user => {
       //logged in
       if (user) {
-        this.user = user;
-      }
-      //if local storage is empty, user is NOT logged IN
-      localStorage.setItem('user', JSON.stringify(this.user));
-    })
+          this.user = user;
+          this.updateUserRole(this.user)
+      }})
   }
 
   // Sign in with email/password
   signIn(email: string, password: string) {
     return this.fireAuth.signInWithEmailAndPassword(email, password)
-      .then((result) => {
-        console.log(result)
-        localStorage.setItem('user', JSON.stringify(result));
-        //this.setUserData(result.user); //update user data
-      })
   }
 
   // Sign up with email/password
-  signUp(email:string, password:string) {
+  private signUp(email:string, password:string, mobilePhone: string, personalName: string, userRole: string) {
     return this.fireAuth.createUserWithEmailAndPassword(email, password)
-      .then((result) => {
+      
+      .then(async (result) => {
         //Send Verification email?
         //this.SendVerificationMail();
-        //this.setUserData(result.user);
-        console.log(result)
+        this.setUserData(result.user, userRole, mobilePhone, personalName);
+        this.userRole = userRole;
+
+        console.log(result.user)
       })
   }
 
-  //Update user Data
-  setUserData(user: firebase.default.User | null) {
+  signUpUser(email:string, password:string, mobilePhone: string, personalName: string){
+    return this.signUp(email, password, mobilePhone, personalName, 'user')
+  }
+
+  signUpSeller(email:string, password:string, mobilePhone: string, personalName: string){
+    return this.signUp(email, password, mobilePhone, personalName, 'seller')
+  }
+
+
+  //Sets user role in the firestore cuz it's not possible to add as property to the user object in firebase;
+  setUserData(user: firebase.default.User | null, userRole: string, mobilePhone: string, personalName: string) {
     if (!user) {
       return;
     }
 
     const userRef: AngularFirestoreDocument<any> = this.fireStore.doc(`users/${user.uid}`);
-    const userData: User = {
+    const userData: IUser = {
       uid: user.uid,
       email: user.email,
-      displayName: user.displayName,
+      emailVerified: user.emailVerified,
+      displayName: personalName,
       photoURL: user.photoURL,
-      emailVerified: user.emailVerified
+      phoneNumber: mobilePhone,
+      userRole: userRole
     }
+    // const userData: IUser = {
+    //   userRole: userRole
+    // }
+
     return userRef.set(userData, {
       merge: true
     })
   }
 
+  //TO DO: implement for future use
+  // getUserData(): Observable {
+
+  // }
+
+  updateUserRole(user: firebase.default.User | null){
+    if (!user) {
+      return;
+    }
+
+    const userRef: AngularFirestoreDocument<any> = this.fireStore.doc(`users/${user.uid}`);
+    userRef.valueChanges().subscribe((userData: IUser) => {
+      console.log(userData);
+      this.userRole = userData?.userRole;
+    });
+  }
+
   // Sign out 
   signOut() {
     return this.fireAuth.signOut().then(() => {
-      localStorage.removeItem('user');
+      this.user= null;
+      this.userRole = null;
       this.router.navigateByUrl('login');
     })
   }
 
-  isUserLogged(){
-    if(localStorage.getItem('user')){
-      return true;
-    } 
-    return false;
+  get getCurrentUser(){
+    return this.user;
+  }
+  get getUserRole(){
+    return this.userRole
   }
 
 }

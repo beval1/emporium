@@ -2,7 +2,20 @@
 
 @import "~bootstrap/scss/bootstrap";
 
+// #FBBE81
+$main-theme-color: #E18A07;
+
 body {
     background-color: #F2F2F7;
 }
 
+.rounded-container {
+    border-radius: 15px;
+}
+
+footer, nav {
+    background-color: $main-theme-color;
+} 
+// footer {
+//     background-color: #FBBE81;
+// }

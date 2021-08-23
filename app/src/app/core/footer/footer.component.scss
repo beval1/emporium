@@ -1,6 +1,12 @@
 footer {
     z-index: 999999;
-    height: 40vh;
-    max-height: 50vh;
-    background-color: white;
+    height: min-content + 2vh;
+    max-height: min-content + 2vh;;
+}
+fa-icon {
+    color: white;
+    margin-left: 25px;
+}
+a:hover {
+    text-decoration: underline !important;
 }

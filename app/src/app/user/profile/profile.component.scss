@@ -1,0 +1,23 @@
+@import '../../../styles.scss' ;
+
+.sidebar {
+    height: min-content;
+    max-height: min-content;
+    background-color: white;
+    width: 250px;
+    // position: sticky;
+    top:6vh;
+}
+
+.nav > li > a {
+    color: black;
+    font-size: large;
+}
+.active {
+    color: white !important;
+    background-color: #FBBE81 !important;
+}
+
+button {
+    width: 250px;
+}
