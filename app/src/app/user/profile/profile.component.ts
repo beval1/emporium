@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -14,7 +14,6 @@ export class ProfileComponent implements OnInit {
   }
 
   signOut(): void {
-    console.log('signing out')
     this.authService.signOut();
   }
 

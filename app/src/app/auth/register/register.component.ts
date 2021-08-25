@@ -4,8 +4,9 @@ import { hasFieldError, validateAllFormFields, passwordMissmatch, isFieldTouched
 import { validateEmail } from 'src/app/shared/validators/emailValidator';
 import { validatePhone } from 'src/app/shared/validators/mobilephoneValidator';
 import { samePasswordValidator } from 'src/app/shared/validators/samePasswordValidator';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { faUser, faPhone, faEnvelope, faKey} from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -25,7 +26,7 @@ export class RegisterComponent implements OnInit {
   faEnvelope = faEnvelope;
   faKey = faKey;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group(
       {
         personalName: ['', [Validators.required, Validators.minLength(3)]],
@@ -60,6 +61,7 @@ export class RegisterComponent implements OnInit {
         this.serviceError = error.message;
         console.log(error.message)
       });
+
   }
   
 

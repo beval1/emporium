@@ -12,17 +12,26 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment.prod';
 
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './pages/home/home.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { RegistrationCompletedComponent } from './pages/registration-completed/registration-completed.component';
+import { AdminModule } from './admin/admin.module';
+import { ProductDetailsComponent } from './pages/product-details/product-details.component';
+import { WishlistComponent } from './wishlist/wishlist.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    NotFoundComponent,
+    RegistrationCompletedComponent,
+    ProductDetailsComponent,
+    WishlistComponent
   ],
   imports: [
     BrowserModule,
@@ -30,6 +39,7 @@ import { SharedModule } from './shared/shared.module';
     BrowserAnimationsModule,
     CoreModule,
     AuthModule,
+    AdminModule,
     SharedModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

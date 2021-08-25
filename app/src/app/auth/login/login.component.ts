@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 import { hasFieldError, validateAllFormFields } from 'src/app/shared/utils/validate';
 import { faKey, faUser } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit {
   faUser = faUser;
   faKey = faKey;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.serviceError = '';
     this.loginForm = this.fb.group({
         email: ['', [Validators.required]], //no need for email validation here... 
@@ -27,7 +28,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  loginHandler(): void {
+loginHandler() {
     if (this.loginForm.invalid || this.loginForm.pending) {
       validateAllFormFields(this.loginForm);
       return;
@@ -44,6 +45,8 @@ export class LoginComponent implements OnInit {
       .catch((error) => {
         console.log(error.message)
         this.serviceError = error.message
-      });
+      })
+
+      
   }
 }

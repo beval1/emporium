@@ -1,0 +1,31 @@
+<div class="container d-flex">
+  <app-admin-aside></app-admin-aside>
+  <div class="container shadow bg-white align-items-center rounded-container">
+    <h3 class="">Create Category</h3>
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+      <div class="form-group mb-2">
+        <label for="category-name" class="form-label">Category Name</label>
+        <input
+          formControlName="categoryName"
+          type="text"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': hasAnyError(categoryForm, 'categoryName')
+          }"
+        />
+  
+        <div
+          class="text-danger mb-1"
+          *ngIf="hasFieldError(categoryForm, 'categoryName', 'required')"
+        >
+          Category name is required!
+        </div>
+      </div>
+  
+      <button class="btn w-10 btn-success" type="submit">
+        Create
+      </button>
+    </form>
+  </div>
+</div>
+

@@ -1,0 +1,51 @@
+<div class="container d-flex">
+    <app-admin-aside></app-admin-aside>
+        <div class="container shadow bg-white align-items-center rounded-container">
+          <h3 class="">Create SubCategory</h3>
+          <form [formGroup]="subcategoryForm" (ngSubmit)="onSubmit()">
+            <div class="form-group mb-2">
+              <label for="subcategory-name" class="form-label">SubCategory Name</label>
+              <input
+                formControlName="subcategoryName"
+                type="text"
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid': hasAnyError(subcategoryForm, 'subcategoryName')
+                }"
+              />
+        
+              <div
+                class="text-danger mb-1"
+                *ngIf="hasFieldError(subcategoryForm, 'subcategoryName', 'required')"
+              >
+                Category name is required!
+              </div>
+            </div>
+
+            <div class="from-group mb-1">
+                <label for="parent-category" class="form-label"
+                  >Parent Category</label
+                >
+                <select
+                  formControlName="parentCategory"
+                  class="form-select"
+                  aria-label="Parent Category Select"
+                  id="category-parent"
+                >
+                  <option value="" selected>Select Parent Category</option>
+                  <option
+                    *ngFor="let category of categories"
+                    [ngValue]="category.uid"
+                  >
+                    {{ category.name }}
+                  </option>
+                </select>
+              </div>
+        
+            <button class="btn w-10 btn-success" type="submit">
+              Create
+            </button>
+          </form>
+        </div>
+      
+</div>

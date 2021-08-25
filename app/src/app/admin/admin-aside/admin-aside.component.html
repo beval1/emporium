@@ -1,0 +1,30 @@
+<div class="container">
+  <div id="sidebar" class="d-flex flex-column sidebar shadow bg-white rounded-container py-2">
+    <ul class="nav nav-pills flex-column">
+      <li>
+        <a routerLink="/admin/manage-categories" class="nav-link" [ngClass]="{
+                'active': getCurrentRoute() == '/admin/manage-categories'
+            }">Manage Categories</a>
+      </li>
+      <li>
+        <a routerLink="/admin/manage-subcategories" class="nav-link" aria-current="page" [ngClass]="{
+            'active': getCurrentRoute() == '/admin/manage-subcategories'
+        }">
+          Manage Subcategories
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/manage-specifications" class="nav-link" aria-current="page" [ngClass]="{
+            'active': getCurrentRoute() == '/admin/manage-specifications'
+        }">
+          Manage Specifications
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/manage-sellers" class="nav-link" [ngClass]="{
+            'active': getCurrentRoute() == '/admin/manage-sellers'
+        }">Manage Sellers</a>
+      </li>
+    </ul>
+  </div>
+</div>
