@@ -1,45 +1,55 @@
 import { Injectable, NgZone } from '@angular/core';
 import { IUser } from '../../shared/interfaces/IUser';
-import { AngularFireAuth } from '@angular/fire/auth';
-import {
-  AngularFirestore,
-  AngularFirestoreDocument,
-} from '@angular/fire/firestore';
+// import { AngularFireAuth } from '@angular/fire/auth';
+// import {
+//   AngularFirestore,
+//   AngularFirestoreDocument,
+// } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { switchMap, tap, map } from 'rxjs/operators';
 import { Observable, of} from 'rxjs';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  user,
+} from '@angular/fire/auth';
+import { Firestore, doc, DocumentReference, setDoc } from '@angular/fire/firestore';
+import {} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  user: Observable<IUser  | undefined | null>;
+  private user$: Observable<any>;
 
   constructor(
-    public fireStore: AngularFirestore, // Inject Firestore service
-    public fireAuth: AngularFireAuth, // Inject Firebase auth service
-    public router: Router
+    // public fireStore: AngularFirestore, // Inject Firestore service
+    // public fireAuth: AngularFireAuth, // Inject Firebase auth service
+    private auth: Auth,
+    private fireStore: Firestore,
+    private router: Router
   ) {
-    this.user = this.fireAuth.authState.pipe(
-      switchMap((user) => {
-        if (user) {
-          localStorage.setItem('user', JSON.stringify(user))
-          return this.fireStore.doc<IUser>(`users/${user.uid}`).valueChanges();
-        } else {
-          return of(null);
-        }
-      })
-    );
+    // this.user = this.fireAuth.authState.pipe(
+    //   switchMap((user) => {
+    //     if (user) {
+    //       localStorage.setItem('user', JSON.stringify(user))
+    //       return this.fireStore.doc<IUser>(`users/${user.uid}`).valueChanges();
+    //     } else {
+    //       return of(null);
+    //     }
+    //   })
+    // );
+    this.user$ = user(this.auth);
   }
 
   // Sign in with email/password
   async signIn(email: string, password: string) {
-    await this.fireAuth
-      .signInWithEmailAndPassword(email, password).then()
+    await signInWithEmailAndPassword(this.auth, email, password)
     this.router.navigateByUrl('/')
   }
 
-  // Sign up with email/password
   private async signUp(
     email: string,
     password: string,
@@ -47,9 +57,7 @@ export class AuthService {
     personalName: string,
     userRole: string
   ) {
-    return await this.fireAuth
-      .createUserWithEmailAndPassword(email, password)
-
+    return await createUserWithEmailAndPassword(this.auth, email, password)
       .then((result) => {
         this.setUserData(result.user, userRole, mobilePhone, personalName);
         console.log(result.user);
@@ -76,7 +84,7 @@ export class AuthService {
   }
 
   setUserData(
-    user: firebase.default.User | null,
+    user: any,
     userRole: string,
     mobilePhone: string,
     personalName: string
@@ -85,7 +93,7 @@ export class AuthService {
       return;
     }
 
-    const userRef: AngularFirestoreDocument<any> = this.fireStore.doc(
+    const userRef: DocumentReference<any> = doc(this.fireStore,
       `users/${user.uid}`
     );
     const userData: IUser = {
@@ -98,34 +106,34 @@ export class AuthService {
       userRole: userRole,
     };
 
-    return userRef.set(userData, {
+    return setDoc(userRef, userData, {
       merge: true,
     });
   }
 
   isLoggedIn(): Observable<boolean>{
-    return this.user.pipe(map((user: IUser | null | undefined) => {
+    return this.user$.pipe(map((user: IUser | null | undefined) => {
       return user == null ? false : true;
     },
     ));
   }
 
   isSeller(): Observable<boolean>{
-    return this.user.pipe(map((user: IUser | null | undefined) => {
+    return this.user$.pipe(map((user: IUser | null | undefined) => {
       return user?.userRole === 'seller' ? true : false;
     },
     ));
   }
 
   isUser(): Observable<boolean>{
-    return this.user.pipe(map((user: IUser | null | undefined) => {
+    return this.user$.pipe(map((user: IUser | null | undefined) => {
       return user?.userRole === 'user' ? true : false;
     },
     ));
   }
 
   isAdmin(): Observable<boolean>{
-    return this.user.pipe(map((user: IUser | null | undefined) => {
+    return this.user$.pipe(map((user: IUser | null | undefined) => {
       return user?.userRole === 'admin' ? true : false;
     },
     ));
@@ -134,12 +142,12 @@ export class AuthService {
   // Sign out
   async signOut() {
     console.log('logging out');
-    await this.fireAuth.signOut();
+    await signOut(this.auth);
     this.router.navigateByUrl('/');
   }
 
   get getCurrentUser() {
-    return this.user;
+    return this.user$;
   }
 
 

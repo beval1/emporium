@@ -7,9 +7,11 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module'
 
-import { AngularFireModule } from '@angular/fire'
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
+//import { AngularFireModule } from '@angular/fire'
+//import { AngularFireAuthModule } from '@angular/fire/auth';
+//import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore,  } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment.prod';
 
 import { HomeComponent } from './pages/home/home.component';
@@ -34,6 +36,11 @@ import { WishlistComponent } from './wishlist/wishlist.component';
     WishlistComponent
   ],
   imports: [
+    //AngularFireModule.initializeApp(environment.firebase),
+    //AngularFireAuthModule,
+    //AngularFirestoreModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -41,9 +48,6 @@ import { WishlistComponent } from './wishlist/wishlist.component';
     AuthModule,
     AdminModule,
     SharedModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireAuthModule,
-    AngularFirestoreModule,
     NgbModule,
     FontAwesomeModule,
     ReactiveFormsModule

@@ -1,19 +1,21 @@
 import { ICategory } from '../../../shared/interfaces/ICategory';
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from '@angular/fire/firestore';
+// import {
+//   AngularFirestore,
+//   AngularFirestoreCollection,
+// } from '@angular/fire/firestore';
+import { collection, Firestore, CollectionReference } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoriesService {
-  private categories: AngularFirestoreCollection<ICategory>;
+  //private categories: AngularFirestoreCollection<ICategory>;
+  private categories: CollectionReference<ICategory>;
 
-  constructor(private fireStore: AngularFirestore) { 
-    this.categories = fireStore.collection<ICategory>('categories');
+  constructor(private fireStore: Firestore) { 
+    this.categories = collection(this.fireStore, 'categories');
   }
 
   getCategoryById(categoryId: string): Observable<ICategory | undefined> {
