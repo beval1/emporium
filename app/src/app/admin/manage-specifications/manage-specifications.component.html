@@ -1,1 +1,51 @@
-<p>manage-specifications works!</p>
+<div class="container d-flex">
+    <app-admin-aside></app-admin-aside>
+        <div class="container shadow bg-white align-items-center rounded-container">
+          <h3 class="">Create Specification</h3>
+          <form [formGroup]="specificationForm" (ngSubmit)="onSubmit()">
+            <div class="form-group mb-2">
+              <label for="specification-name" class="form-label">Specification Name</label>
+              <input
+                formControlName="specificationName"
+                type="text"
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid': hasAnyError(specificationForm, 'specificationName')
+                }"
+              />
+        
+              <div
+                class="text-danger mb-1"
+                *ngIf="hasFieldError(specificationForm, 'specificationName', 'required')"
+              >
+                Category name is required!
+              </div>
+            </div>
+
+            <div class="from-group mb-1">
+                <label for="subcategory" class="form-label"
+                  >Subcategory</label
+                >
+                <select
+                  formControlName="subcategory"
+                  class="form-select"
+                  aria-label="Subcategory Select"
+                  id="subcategory-select"
+                >
+                  <option value="" selected>Select Parent Subcategory</option>
+                  <option
+                    *ngFor="let subcategory of subcategories"
+                    [ngValue]="subcategory.uid"
+                  >
+                    {{ subcategory.name }}
+                  </option>
+                </select>
+              </div>
+        
+            <button class="btn w-10 btn-success mb-3 mt-2" type="submit">
+              Create
+            </button>
+          </form>
+        </div>
+      
+</div>

@@ -1,7 +1,7 @@
 <div class="container d-flex">
   <app-admin-aside></app-admin-aside>
   <div class="container shadow bg-white align-items-center rounded-container">
-    <h3 class="">Create Category</h3>
+    <h3 class="mt-2">Create Category</h3>
     <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
       <div class="form-group mb-2">
         <label for="category-name" class="form-label">Category Name</label>
@@ -22,10 +22,40 @@
         </div>
       </div>
   
-      <button class="btn w-10 btn-success" type="submit">
+      <button class="btn w-10 mb-3 mt-2 btn-success" type="submit">
         Create
       </button>
     </form>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Category Name</th>
+          <th scope="col">Number of subcategories</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
