@@ -39,11 +39,16 @@ export class SpecificationsService {
     categoryName: string,
     parentId: string,
     type: SpecificationType,
-    minTextSize?: Number,
-    maxTextSize?: Number,
-    minNumber?: Number,
-    maxNumber?: Number,
+    minTextSize?: Number | null,
+    maxTextSize?: Number | null,
+    minNumber?: Number | null,
+    maxNumber?: Number | null,
   ) {
+    // minTextSize = undefined ? null : minTextSize;
+    // maxTextSize = undefined ? null : maxTextSize;
+    // minNumber = undefined ? null : minNumber;
+    // maxNumber = undefined ? null : maxNumber;
+
     const specificationId = this.fireStore.createId();
 
     const specification: ISpecification = {
@@ -51,10 +56,10 @@ export class SpecificationsService {
       uid: specificationId,
       parentSubcategory: parentId,
       type: type,
-      minTextSize: minTextSize,
-      maxTextSize: maxTextSize,
-      minNumber: minNumber,
-      maxNumber: maxNumber,
+      minTextSize: minTextSize || null,
+      maxTextSize: maxTextSize || null,
+      minNumber: minNumber || null,
+      maxNumber: maxNumber || null,
     };
 
     await this.specifications.doc(specificationId).set(specification);
@@ -70,7 +75,7 @@ export class SpecificationsService {
           name: subcategory!.name,
           parentCategory: subcategory!.parentCategory,
           specifications: [...subcategory!.specifications, specificationId],
-          picture: subcategory?.picture,
+          picture: subcategory?.picture || null,
         };
         subcategoryRef.set(updatedSubcategory, {
           merge: true,

@@ -3,5 +3,5 @@ export interface ISubcategory {
     name: string,
     parentCategory: string,
     specifications: string[],
-    picture?: string,
+    picture: string | null,
 }

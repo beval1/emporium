@@ -31,14 +31,14 @@ export class SubcategoriesService {
     return this.subcategories.valueChanges();
   }
 
-  async createSubCategory(categoryName: string, parentId: string, picture?: string) {
+  async createSubCategory(categoryName: string, parentId: string, picture?: string | null ) {
     const subcategoryId = this.fireStore.createId();
 
     const subcategory: ISubcategory = {
       name: categoryName,
       uid: subcategoryId,
       parentCategory: parentId,
-      picture: picture,
+      picture: picture || null,
       specifications: []
     };
 
@@ -54,7 +54,7 @@ export class SubcategoriesService {
           uid: parentId,
           name: category!.name,
           subcategories: [...category!.subcategories, subcategoryId],
-          picture: category?.picture,
+          picture: category?.picture || null,
         };
         categoryRef.set(updatedCategory, {
           merge: true,

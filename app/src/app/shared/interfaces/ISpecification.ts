@@ -5,8 +5,8 @@ export interface ISpecification {
   name: string;
   parentSubcategory: string;
   type: SpecificationType,
-  minTextSize?: Number,
-  maxTextSize?: Number,
-  minNumber?: Number,
-  maxNumber?: Number,
+  minTextSize: Number | null,
+  maxTextSize: Number | null,
+  minNumber: Number | null,
+  maxNumber: Number | null,
 }

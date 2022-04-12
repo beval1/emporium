@@ -65,7 +65,7 @@ export class ManageSubcategoriesComponent implements OnInit {
 
     try {
       this.subcategoriesService.createSubCategory(subcategoryName, parentCategory);
-      this.notificationsService.showSuccess('Subcategory create successfully!')
+      this.notificationsService.showSuccess('Subcategory created successfully!')
     } catch (error: any) {
       this.notificationsService.showError(`Error: ${error.message}`)
     }

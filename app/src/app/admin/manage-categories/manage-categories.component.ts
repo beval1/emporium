@@ -46,21 +46,19 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.notificationsService.showSuccess('Category create successfully!');
-    // if (this.categoryForm.invalid || this.categoryForm.pending) {
-    //   validateAllFormFields(this.categoryForm);
-    //   return;
-    // }
+    if (this.categoryForm.invalid || this.categoryForm.pending) {
+      validateAllFormFields(this.categoryForm);
+      return;
+    }
 
-    // const categoryName = this.categoryForm.get('categoryName')?.value;
+    const categoryName = this.categoryForm.get('categoryName')?.value;
 
-    // try {
-    //   this.categoriesService.createCategory(categoryName);
-    //   this.notificationsService.showSuccess('Category create successfully!')
-    // } catch (error: any) {
-    //   this.notificationsService.showError(`Error: ${error.message}`)
-    // }
+    this.categoriesService.createCategory(categoryName).then(
+      () => this.notificationsService.showSuccess('Category created successfully!')).catch((error) => {
+      this.notificationsService.showError(`Error: ${error.message}`);
+    })
+    
 
-    // resetForm(this.categoryForm);
+    resetForm(this.categoryForm);
   }
 }

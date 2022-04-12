@@ -1,13 +1,17 @@
+<!-- <div class="bg-danger p-5"></div>  -->
+
 <ngb-toast
       *ngFor="let notification of notificationsService.notifications"
       [class]="notification.classname"
       [autohide]="true"
       [delay]="notification.delay || 5000"
+      (hidden)="notificationsService.remove(notification)"
     >
       <ng-template [ngIf]="isTemplate(notification)" [ngIfElse]="text">
         <ng-template [ngTemplateOutlet]="notification.textOrTpl"></ng-template>
       </ng-template>
 
       <ng-template #text>{{ notification.textOrTpl }}</ng-template>
+
 </ngb-toast>
-<!-- (hidden)="notificationsService.remove(notification)" -->
+

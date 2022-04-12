@@ -12,11 +12,11 @@ export class NotificationsService {
   }
 
   showSuccess(textOrTpl: string | TemplateRef<any>){
-    this.show(textOrTpl, {classname: 'bg-success text-light', delay: 10000})
+    this.show(textOrTpl, {classname: 'notification bg-success text-light', delay: 10000})
   }
 
   showError(textOrTpl: string | TemplateRef<any>){
-    this.show(textOrTpl, {classname: 'bg-danger text-light', delay: 15000})
+    this.show(textOrTpl, {classname: 'notification bg-danger text-light', delay: 15000})
   }
 
   remove(toast: any) {
