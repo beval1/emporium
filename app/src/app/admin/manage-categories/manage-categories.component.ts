@@ -1,11 +1,15 @@
-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ICategory } from 'src/app/shared/interfaces/ICategory';
 import { resetForm } from 'src/app/shared/utils/forms';
-import { hasAnyError, hasFieldError, validateAllFormFields } from 'src/app/shared/utils/validate';
+import {
+  hasAnyError,
+  hasFieldError,
+  validateAllFormFields,
+} from 'src/app/shared/utils/validate';
 import { CategoriesService } from '../services/categories/categories.service';
+import { NotificationsService } from 'src/app/notification/services/notifications.service';
 
 @Component({
   selector: 'app-manage-categories',
@@ -21,10 +25,11 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private notificationsService: NotificationsService
   ) {
     this.categoryForm = this.fb.group({
-      categoryName: ['', [Validators.required]]
+      categoryName: ['', [Validators.required]],
     });
 
     this.subscription = this.categoriesService
@@ -41,17 +46,21 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.categoryForm.invalid || this.categoryForm.pending) {
-      validateAllFormFields(this.categoryForm);
-      return;
-    }
+    this.notificationsService.showSuccess('Category create successfully!');
+    // if (this.categoryForm.invalid || this.categoryForm.pending) {
+    //   validateAllFormFields(this.categoryForm);
+    //   return;
+    // }
 
-    const categoryName = this.categoryForm.get('categoryName')?.value;
+    // const categoryName = this.categoryForm.get('categoryName')?.value;
 
-    this.categoriesService.createCategory(categoryName);
+    // try {
+    //   this.categoriesService.createCategory(categoryName);
+    //   this.notificationsService.showSuccess('Category create successfully!')
+    // } catch (error: any) {
+    //   this.notificationsService.showError(`Error: ${error.message}`)
+    // }
 
-    resetForm(this.categoryForm);
+    // resetForm(this.categoryForm);
   }
-
-  
 }

@@ -25,7 +25,7 @@ export class CategoriesService {
     return this.categories.valueChanges();
   }
 
-  async createCategory(categoryName: string) {
+  async createCategory(categoryName: string, categoryPicture?: string) {
     const categoryId = this.fireStore.createId();
 
     const category: ICategory = 
@@ -33,7 +33,7 @@ export class CategoriesService {
       name: categoryName,
       uid: categoryId,
       subcategories: [],
-      categoryPicture: ''
+      picture: categoryPicture
     }
 
     await this.categories.doc(categoryId).set(category);

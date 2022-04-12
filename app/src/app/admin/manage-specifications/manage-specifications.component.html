@@ -1,7 +1,7 @@
 <div class="container d-flex">
     <app-admin-aside></app-admin-aside>
         <div class="container shadow bg-white align-items-center rounded-container">
-          <h3 class="">Create Specification</h3>
+          <h3 class="mt-2">Create Specification</h3>
           <form [formGroup]="specificationForm" (ngSubmit)="onSubmit()">
             <div class="form-group mb-2">
               <label for="specification-name" class="form-label">Specification Name</label>
@@ -22,12 +22,32 @@
               </div>
             </div>
 
-            <div class="from-group mb-1">
-                <label for="subcategory" class="form-label"
+            <div class="from-group mb-2 mt-2">
+              <label for="specificationType-select" class="form-label"
+                >Type</label
+              >
+              <select
+                formControlName="specificationType"
+                class="form-select"
+                aria-label="Specification Type Select"
+                id="specificationType-select"
+              >
+                <option value="" selected>Select Type</option>
+                <option
+                  *ngFor="let type of specificationType | keyvalue"
+                  [ngValue]="type"
+                >
+                  {{ type.value }}
+                </option>
+              </select>
+            </div>
+
+            <div class="from-group mb-2 mt-3">
+                <label for="subcategory-select" class="form-label"
                   >Subcategory</label
                 >
                 <select
-                  formControlName="subcategory"
+                  formControlName="parentSubcategory"
                   class="form-select"
                   aria-label="Subcategory Select"
                   id="subcategory-select"

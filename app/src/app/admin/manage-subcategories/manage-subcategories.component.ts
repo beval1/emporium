@@ -7,6 +7,7 @@ import { resetForm } from 'src/app/shared/utils/forms';
 import { hasAnyError, hasFieldError, validateAllFormFields } from 'src/app/shared/utils/validate';
 import { CategoriesService } from '../services/categories/categories.service';
 import { SubcategoriesService } from '../services/subcategories/subcategories.service';
+import { NotificationsService } from 'src/app/notification/services/notifications.service';
 
 @Component({
   selector: 'app-manage-subcategories',
@@ -25,7 +26,8 @@ export class ManageSubcategoriesComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private categoriesService: CategoriesService,
-    private subcategoriesService: SubcategoriesService
+    private subcategoriesService: SubcategoriesService,
+    private notificationsService: NotificationsService,
   ) {
     this.subcategoryForm = this.fb.group({
       subcategoryName: ['', [Validators.required]],
@@ -61,7 +63,12 @@ export class ManageSubcategoriesComponent implements OnInit {
     const subcategoryName = this.subcategoryForm.get('subcategoryName')?.value;
     const parentCategory = this.subcategoryForm.get('parentCategory')?.value
 
-    this.subcategoriesService.createSubCategory(subcategoryName, parentCategory);
+    try {
+      this.subcategoriesService.createSubCategory(subcategoryName, parentCategory);
+      this.notificationsService.showSuccess('Subcategory create successfully!')
+    } catch (error: any) {
+      this.notificationsService.showError(`Error: ${error.message}`)
+    }
 
     resetForm(this.subcategoryForm)
   }

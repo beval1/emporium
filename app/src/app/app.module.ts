@@ -22,7 +22,8 @@ import { RegistrationCompletedComponent } from './pages/registration-completed/r
 import { AdminModule } from './admin/admin.module';
 import { ProductDetailsComponent } from './pages/product-details/product-details.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
-
+import { NotificationModule } from './notification/notification.module';
+// import { NotificationContainerComponent } from './notification/notification-container/notification-container.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import { WishlistComponent } from './wishlist/wishlist.component';
     NotFoundComponent,
     RegistrationCompletedComponent,
     ProductDetailsComponent,
-    WishlistComponent
+    WishlistComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +47,8 @@ import { WishlistComponent } from './wishlist/wishlist.component';
     AngularFirestoreModule,
     NgbModule,
     FontAwesomeModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NotificationModule
   ],
   providers: [],
   bootstrap: [AppComponent]
