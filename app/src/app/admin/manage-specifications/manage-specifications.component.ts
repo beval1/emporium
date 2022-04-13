@@ -3,7 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ISubcategory } from 'src/app/shared/interfaces/ISubcategory';
 import { resetForm } from 'src/app/shared/utils/forms';
-import { hasAnyError, hasFieldError, validateAllFormFields } from 'src/app/shared/utils/validate';
+import {
+  hasAnyError,
+  hasFieldError,
+  validateAllFormFields,
+} from 'src/app/shared/utils/validate';
 import { SubcategoriesService } from '../services/subcategories/subcategories.service';
 import { SpecificationsService } from '../services/specifications/specifications.service';
 import { ISpecification } from 'src/app/shared/interfaces/ISpecification';
@@ -13,10 +17,10 @@ import { NotificationsService } from 'src/app/notification/services/notification
 @Component({
   selector: 'app-manage-specifications',
   templateUrl: './manage-specifications.component.html',
-  styleUrls: ['./manage-specifications.component.scss']
+  styleUrls: ['./manage-specifications.component.scss'],
 })
 export class ManageSpecificationsComponent implements OnInit {
-  specificationType = SpecificationType
+  specificationType = SpecificationType;
   subcategoriesSubscription: Subscription;
   specificationsSubscription: Subscription;
   specificationForm: FormGroup;
@@ -29,11 +33,11 @@ export class ManageSpecificationsComponent implements OnInit {
     private fb: FormBuilder,
     private subcategoriesService: SubcategoriesService,
     private specificationsService: SpecificationsService,
-    private notificationsService: NotificationsService,
+    private notificationsService: NotificationsService
   ) {
     this.specificationForm = this.fb.group({
       specificationName: ['', [Validators.required]],
-      parentCategory: ['', Validators.required],
+      parentSubcategory: ['', Validators.required],
       specificationType: ['', Validators.required],
     });
 
@@ -49,8 +53,7 @@ export class ManageSpecificationsComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.specificationsSubscription.unsubscribe();
@@ -63,19 +66,32 @@ export class ManageSpecificationsComponent implements OnInit {
       return;
     }
 
-    const specificationName = this.specificationForm.get('specificationName')?.value;
-    const parentSubcategory = this.specificationForm.get('parentSubcategory')?.value
-    const specificationType = this.specificationForm.get('specificationType')?.value
+    const specificationName =
+      this.specificationForm.get('specificationName')?.value;
+    const parentSubcategory =
+      this.specificationForm.get('parentSubcategory')?.value;
+    const specificationType =
+      this.specificationForm.get('specificationType')?.value;
 
-    try {
-      this.specificationsService.createSpecification(specificationName, parentSubcategory, specificationType);
-      this.notificationsService.showSuccess("Specification created successfully!")
-    } catch (error: any) {
-      this.notificationsService.showError(`Error: ${error.message}`)
-    }
+    this.specificationsService
+      .createSpecification(
+        specificationName,
+        parentSubcategory,
+        specificationType
+      )
+      .then(() =>
+        this.notificationsService.showSuccess(
+          'Specification created successfully!'
+        )
+      )
+      .catch((error) => {
+        this.notificationsService.showError(`Error: ${error.message}`);
+      });
 
-    resetForm(this.specificationForm)
+    resetForm(this.specificationForm);
   }
 
-
+  onSubcategoryChange() {
+    
+  }
 }

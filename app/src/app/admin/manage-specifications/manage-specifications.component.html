@@ -3,6 +3,34 @@
         <div class="container shadow bg-white align-items-center rounded-container">
           <h3 class="mt-2">Create Specification</h3>
           <form [formGroup]="specificationForm" (ngSubmit)="onSubmit()">
+
+            <div class="from-group mb-2 mt-3">
+              <label for="parentSubcategory" class="form-label"
+                >Subcategory</label
+              >
+              <select
+                formControlName="parentSubcategory"
+                class="form-select"
+                aria-label="Subcategory Select"
+                id="parentSubcategory"
+                (change)="onSubcategoryChange()"
+              >
+                <option value="" selected>Select Parent Subcategory</option>
+                <option
+                  *ngFor="let subcategory of subcategories"
+                  [ngValue]="subcategory.uid"
+                >
+                  {{ subcategory.name }}
+                </option>
+              </select>
+              <div
+              class="text-danger mb-1"
+              *ngIf="hasFieldError(specificationForm, 'parentSubcategory', 'required')"
+            >
+              Subcategory is required!
+              </div>
+            </div>
+
             <div class="form-group mb-2">
               <label for="specification-name" class="form-label">Specification Name</label>
               <input
@@ -35,32 +63,21 @@
                 <option value="" selected>Select Type</option>
                 <option
                   *ngFor="let type of specificationType | keyvalue"
-                  [ngValue]="type"
+                  [ngValue]="type.value"
                 >
                   {{ type.value }}
                 </option>
               </select>
+
+              <div
+                class="text-danger mb-1"
+                *ngIf="hasFieldError(specificationForm, 'specificationType', 'required')"
+              >
+                Type is required!
+              </div>
             </div>
 
-            <div class="from-group mb-2 mt-3">
-                <label for="subcategory-select" class="form-label"
-                  >Subcategory</label
-                >
-                <select
-                  formControlName="parentSubcategory"
-                  class="form-select"
-                  aria-label="Subcategory Select"
-                  id="subcategory-select"
-                >
-                  <option value="" selected>Select Parent Subcategory</option>
-                  <option
-                    *ngFor="let subcategory of subcategories"
-                    [ngValue]="subcategory.uid"
-                  >
-                    {{ subcategory.name }}
-                  </option>
-                </select>
-              </div>
+              
         
             <button class="btn w-10 btn-success mb-3 mt-2" type="submit">
               Create

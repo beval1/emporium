@@ -4,7 +4,11 @@ import { Subscription } from 'rxjs';
 import { ICategory } from 'src/app/shared/interfaces/ICategory';
 import { ISubcategory } from 'src/app/shared/interfaces/ISubcategory';
 import { resetForm } from 'src/app/shared/utils/forms';
-import { hasAnyError, hasFieldError, validateAllFormFields } from 'src/app/shared/utils/validate';
+import {
+  hasAnyError,
+  hasFieldError,
+  validateAllFormFields,
+} from 'src/app/shared/utils/validate';
 import { CategoriesService } from '../services/categories/categories.service';
 import { SubcategoriesService } from '../services/subcategories/subcategories.service';
 import { NotificationsService } from 'src/app/notification/services/notifications.service';
@@ -12,7 +16,7 @@ import { NotificationsService } from 'src/app/notification/services/notification
 @Component({
   selector: 'app-manage-subcategories',
   templateUrl: './manage-subcategories.component.html',
-  styleUrls: ['./manage-subcategories.component.scss']
+  styleUrls: ['./manage-subcategories.component.scss'],
 })
 export class ManageSubcategoriesComponent implements OnInit {
   categoriesSubscription: Subscription;
@@ -27,11 +31,11 @@ export class ManageSubcategoriesComponent implements OnInit {
     private fb: FormBuilder,
     private categoriesService: CategoriesService,
     private subcategoriesService: SubcategoriesService,
-    private notificationsService: NotificationsService,
+    private notificationsService: NotificationsService
   ) {
     this.subcategoryForm = this.fb.group({
       subcategoryName: ['', [Validators.required]],
-      parentCategory: ['', Validators.required]
+      parentCategory: ['', Validators.required],
     });
 
     this.categoriesSubscription = this.categoriesService
@@ -46,8 +50,7 @@ export class ManageSubcategoriesComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.subcategoriesSubscription.unsubscribe();
@@ -61,16 +64,19 @@ export class ManageSubcategoriesComponent implements OnInit {
     }
 
     const subcategoryName = this.subcategoryForm.get('subcategoryName')?.value;
-    const parentCategory = this.subcategoryForm.get('parentCategory')?.value
+    const parentCategory = this.subcategoryForm.get('parentCategory')?.value;
 
-    try {
-      this.subcategoriesService.createSubCategory(subcategoryName, parentCategory);
-      this.notificationsService.showSuccess('Subcategory created successfully!')
-    } catch (error: any) {
-      this.notificationsService.showError(`Error: ${error.message}`)
-    }
+    this.subcategoriesService
+      .createSubCategory(subcategoryName, parentCategory)
+      .then(() =>
+        this.notificationsService.showSuccess(
+          'Subcategory created successfully!'
+        )
+      )
+      .catch((error) => {
+        this.notificationsService.showError(`Error: ${error.message}`);
+      });
 
-    resetForm(this.subcategoryForm)
+    resetForm(this.subcategoryForm);
   }
-
 }
