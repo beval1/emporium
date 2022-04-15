@@ -7,7 +7,7 @@ import { ManageSpecificationsComponent } from './manage-specifications/manage-sp
 import { ManageSellersComponent } from './manage-sellers/manage-sellers.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { AdminAsideComponent } from './admin-aside/admin-aside.component';
 import { RouterModule } from '@angular/router';
@@ -30,6 +30,7 @@ import { RouterModule } from '@angular/router';
     SharedModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    FormsModule,
     RouterModule,
   ]
 })

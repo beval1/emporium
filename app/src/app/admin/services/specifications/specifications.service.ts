@@ -1,60 +1,49 @@
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument,
+  AngularFirestoreDocument
 } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { Observable, first } from 'rxjs';
 import { SubcategoriesService } from '../subcategories/subcategories.service';
 import { ISpecification } from 'src/app/shared/interfaces/ISpecification';
 import { ISubcategory } from 'src/app/shared/interfaces/ISubcategory';
-import { SpecificationType } from 'src/app/shared/enums/SpecificationTypeEnum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SpecificationsService {
-  private specifications: AngularFirestoreCollection<ISpecification>;
-
   constructor(
     private fireStore: AngularFirestore,
     private subcategoriesService: SubcategoriesService
-  ) {
-    this.specifications =
-      fireStore.collection<ISpecification>('specifications');
-  }
+  ) {}
 
-  getSpecificationById(
-    categoryId: string
-  ): Observable<ISpecification | undefined> {
-    return this.specifications.doc(categoryId).valueChanges();
-  }
+  // getSpecificationById(
+  //   categoryId: string
+  // ): Observable<ISpecification | undefined> {
+  //   return this.specifications.doc(categoryId).valueChanges();
+  // }
 
-  getAllSpecifications(): Observable<ISpecification[]> {
-    return this.specifications.valueChanges();
+  getAllSpecificationsForSubcategory(categoryId: string, subcategoryId: string): Observable<ISpecification[]> {
+    return this.fireStore.collection<ISpecification>(`categories/${categoryId}/subcategories/${subcategoryId}/specifications`).valueChanges()
   }
 
   async createSpecification(
-    categoryName: string,
-    parentId: string,
-    type: SpecificationType,
+    specificationName: string,
+    categoryId: string,
+    subcategoryId: string,
+    type: string,
     minTextSize?: Number | null,
     maxTextSize?: Number | null,
     minNumber?: Number | null,
     maxNumber?: Number | null,
   ) {
-    // minTextSize = undefined ? null : minTextSize;
-    // maxTextSize = undefined ? null : maxTextSize;
-    // minNumber = undefined ? null : minNumber;
-    // maxNumber = undefined ? null : maxNumber;
 
     const specificationId = this.fireStore.createId();
 
     const specification: ISpecification = {
-      name: categoryName,
+      name: specificationName,
       uid: specificationId,
-      parentSubcategory: parentId,
+      parentSubcategory: subcategoryId,
       type: type,
       minTextSize: minTextSize || null,
       maxTextSize: maxTextSize || null,
@@ -62,18 +51,18 @@ export class SpecificationsService {
       maxNumber: maxNumber || null,
     };
 
-    await this.specifications.doc(specificationId).set(specification);
+    await this.fireStore.collection<ISpecification>(`categories/${categoryId}/subcategories/${subcategoryId}/specifications`).doc(specificationId).set(specification);
 
     this.subcategoriesService
-      .getSubCategoryById(parentId)
+      .getSubcategoryById(categoryId, subcategoryId)
       .pipe(first())
       .subscribe((subcategory) => {
         const subcategoryRef: AngularFirestoreDocument<ISubcategory> =
-          this.fireStore.doc(`subcategories/${parentId}`);
+          this.fireStore.doc(`categories/${categoryId}/subcategories/${subcategoryId}`);
         const updatedSubcategory: ISubcategory = {
-          uid: parentId,
+          uid: subcategoryId,
           name: subcategory!.name,
-          parentCategory: subcategory!.parentCategory,
+          parentCategory: categoryId,
           specifications: [...subcategory!.specifications, specificationId],
           picture: subcategory?.picture || null,
         };
@@ -83,7 +72,10 @@ export class SpecificationsService {
       });
   }
 
-  async deletespecificationById(subcategoryId: string) {
-    await this.specifications.doc(subcategoryId).delete();
+  async deleteSpecificationById(categoryId: string, subcategoryId: string, specificationId: string) {
+    await this.fireStore
+      .collection<ISpecification>(`categories/${categoryId}/subcategories/${subcategoryId}/specifications`)
+      .doc(specificationId)
+      .delete();
   }
 }

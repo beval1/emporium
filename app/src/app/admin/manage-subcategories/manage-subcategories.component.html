@@ -1,51 +1,81 @@
 <div class="container d-flex">
-    <app-admin-aside></app-admin-aside>
-        <div class="container shadow bg-white align-items-center rounded-container">
-          <h3 class="mt-2">Create Subcategory</h3>
-          <form [formGroup]="subcategoryForm" (ngSubmit)="onSubmit()">
-            <div class="form-group mb-2">
-              <label for="subcategory-name" class="form-label">Subcategory Name</label>
-              <input
-                formControlName="subcategoryName"
-                type="text"
-                class="form-control"
-                [ngClass]="{
-                  'is-invalid': hasAnyError(subcategoryForm, 'subcategoryName')
-                }"
-              />
-        
-              <div
-                class="text-danger mb-1"
-                *ngIf="hasFieldError(subcategoryForm, 'subcategoryName', 'required')"
-              >
-                Category name is required!
-              </div>
-            </div>
+  <app-admin-aside></app-admin-aside>
+  <div class="container shadow bg-white align-items-center rounded-container">
+    <h3 class="mt-2">Create Subcategory</h3>
 
-            <div class="from-group mb-1">
-                <label for="parent-category" class="form-label"
-                  >Parent Category</label
-                >
-                <select
-                  formControlName="parentCategory"
-                  class="form-select"
-                  aria-label="Parent Category Select"
-                  id="category-parent"
-                >
-                  <option value="" selected>Select Parent Category</option>
-                  <option
-                    *ngFor="let category of categories"
-                    [ngValue]="category.uid"
-                  >
-                    {{ category.name }}
-                  </option>
-                </select>
-              </div>
-        
-            <button class="btn w-10 btn-success mb-3 mt-2" type="submit">
-              Create
-            </button>
-          </form>
+    <div class="from-group mb-1">
+      <label for="parent-category" class="form-label">Parent Category</label>
+      <select class="form-select" aria-label="Parent Category Select" id="category-parent"
+        [(ngModel)]="selectedCategory" (ngModelChange)="onCategoryChange()">
+        <option value="" selected>Select Parent Category</option>
+        <option *ngFor="let category of categories" [ngValue]="category.uid">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+
+    <div *ngIf="isCategorySelected()">
+      <form [formGroup]="subcategoryForm" (ngSubmit)="onSubmit()">
+        <div class="form-group mb-2">
+          <label for="subcategory-name" class="form-label">Subcategory Name</label>
+          <input formControlName="subcategoryName" type="text" class="form-control" [ngClass]="{
+                  'is-invalid': hasAnyError(subcategoryForm, 'subcategoryName')
+                }" />
+
+          <div class="text-danger mb-1" *ngIf="hasFieldError(subcategoryForm, 'subcategoryName', 'required')">
+            Category name is required!
+          </div>
         </div>
-      
+
+
+
+        <div class="form-group mb-2">
+          <label class="form-label" for="subcategory-image">Image</label>
+          <input class="form-control" id="subcategory-image" type="file" accept=".png,.jpg"
+            (change)="onUpload($event.target)" />
+        </div>
+
+
+        <button class="btn w-10 btn-success mb-3 mt-2" type="submit">
+          Create
+        </button>
+      </form>
+
+      <div *ngIf="
+            this.subcategories === undefined || this.subcategories.length == 0;
+            then noSubcategories;
+            else table
+          "></div>
+
+
+    <ng-template #noSubcategories>
+      <h5>There are no subcategories!</h5>
+    </ng-template>
+
+    <ng-template #table>
+      <h3 class="mt-2">Delete Subcategories</h3>
+      <table class="table table-hover">
+        <thead class="text-center">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Specifications Count</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let subcategory of subcategories; let i=index">
+            <td>{{i+1}}</td>
+            <td scope="row">{{ subcategory.name }}</td>
+            <td>{{subcategory.specifications.length}}</td>
+            <td>
+              <button (click)="onDelete(subcategory.uid, subcategory.name)" class="btn-danger btn">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-template>
+    </div>
+  </div>
+
 </div>

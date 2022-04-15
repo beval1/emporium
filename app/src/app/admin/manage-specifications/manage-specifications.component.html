@@ -1,88 +1,168 @@
 <div class="container d-flex">
-    <app-admin-aside></app-admin-aside>
-        <div class="container shadow bg-white align-items-center rounded-container">
-          <h3 class="mt-2">Create Specification</h3>
-          <form [formGroup]="specificationForm" (ngSubmit)="onSubmit()">
+  <app-admin-aside></app-admin-aside>
+  <div class="container shadow bg-white align-items-center rounded-container">
 
-            <div class="from-group mb-2 mt-3">
-              <label for="parentSubcategory" class="form-label"
-                >Subcategory</label
-              >
-              <select
-                formControlName="parentSubcategory"
-                class="form-select"
-                aria-label="Subcategory Select"
-                id="parentSubcategory"
-                (change)="onSubcategoryChange()"
-              >
-                <option value="" selected>Select Parent Subcategory</option>
-                <option
-                  *ngFor="let subcategory of subcategories"
-                  [ngValue]="subcategory.uid"
-                >
-                  {{ subcategory.name }}
-                </option>
-              </select>
-              <div
-              class="text-danger mb-1"
-              *ngIf="hasFieldError(specificationForm, 'parentSubcategory', 'required')"
-            >
-              Subcategory is required!
-              </div>
-            </div>
+    <h3 class="mt-2">Create Specification</h3>
+    <div class="from-group mb-2 mt-3">
+      <label for="category" class="form-label">Category</label>
+      <select class="form-select" aria-label="Subcategory Select" id="category" [(ngModel)]="selectedCategory"
+        (ngModelChange)="onCategoryChange()">
+        <option value="" selected>Select Category</option>
+        <option *ngFor="let category of categories" [ngValue]="category.uid">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
 
-            <div class="form-group mb-2">
-              <label for="specification-name" class="form-label">Specification Name</label>
-              <input
-                formControlName="specificationName"
-                type="text"
-                class="form-control"
-                [ngClass]="{
-                  'is-invalid': hasAnyError(specificationForm, 'specificationName')
-                }"
-              />
-        
-              <div
-                class="text-danger mb-1"
-                *ngIf="hasFieldError(specificationForm, 'specificationName', 'required')"
-              >
-                Category name is required!
-              </div>
-            </div>
+    <div class="from-group mb-2 mt-3" *ngIf="this.selectedCategory != ''">
+      <label for="parentSubcategory" class="form-label">Subcategory</label>
+      <select class="form-select" aria-label="Subcategory Select" id="parentSubcategory"
+        [(ngModel)]="selectedSubcategory" (ngModelChange)="onSubcategoryChange()">
+        <option value="" selected>Select Parent Subcategory</option>
+        <option *ngFor="let subcategory of subcategories" [ngValue]="subcategory.uid">
+          {{ subcategory.name }}
+        </option>
+      </select>
+    </div>
 
-            <div class="from-group mb-2 mt-2">
-              <label for="specificationType-select" class="form-label"
-                >Type</label
-              >
-              <select
-                formControlName="specificationType"
-                class="form-select"
-                aria-label="Specification Type Select"
-                id="specificationType-select"
-              >
-                <option value="" selected>Select Type</option>
-                <option
-                  *ngFor="let type of specificationType | keyvalue"
-                  [ngValue]="type.value"
-                >
-                  {{ type.value }}
-                </option>
-              </select>
+    <div class="from-group mb-2 mt-2" *ngIf="this.selectedSubcategory != ''">
+      <label for="specificationType-select" class="form-label">Type</label>
+      <select class="form-select" aria-label="Specification Type Select" [(ngModel)]="selectedType"
+        (ngModelChange)="onChangeType()" id="specificationType-select">
+        <option value="" selected>Select Type</option>
+        <option *ngFor="let type of specificationType | keyvalue" [ngValue]="type.key">
+          {{ type.key }}
+        </option>
+      </select>
+    </div>
 
-              <div
-                class="text-danger mb-1"
-                *ngIf="hasFieldError(specificationForm, 'specificationType', 'required')"
-              >
-                Type is required!
-              </div>
-            </div>
 
-              
-        
-            <button class="btn w-10 btn-success mb-3 mt-2" type="submit">
-              Create
-            </button>
-          </form>
+    <form [formGroup]="specificationForm" (ngSubmit)="onSubmit()" *ngIf="this.selectedType != ''">
+      <div class="form-group mb-2">
+        <label for="specification-name" class="form-label">Specification Name</label>
+        <input formControlName="specificationName" type="text" class="form-control" [ngClass]="{
+              'is-invalid': hasAnyError(specificationForm, 'specificationName')
+            }" />
+        <div class="text-danger mb-1" *ngIf="hasFieldError(specificationForm, 'specificationName', 'required')">
+          Category name is required!
         </div>
-      
+      </div>
+
+      <div *ngIf="this.selectedType == 'BigText' || this.selectedType == 'SmallText' then text"></div>
+      <div *ngIf="this.selectedType == 'Number' then number"></div>
+      <ng-template #text>
+        <div class="form-group mb-2">
+          <label for="specification-minTextSize" class="form-label">Specification Minimum Text Size</label>
+          <input formControlName="specificationMinTextSize" type="text" class="form-control" [ngClass]="{
+                'is-invalid': hasAnyError(specificationForm, 'specificationName')
+              }" />
+        </div>
+        <div class="form-group mb-2">
+          <label for="specification-maxTextSize" class="form-label">Specification Maximum Text Size</label>
+          <input formControlName="specificationMaxTextSize" type="text" class="form-control" [ngClass]="{
+                'is-invalid': hasAnyError(specificationForm, 'specificationMaxTextSize')
+              }" />
+        </div>
+      </ng-template>
+      <ng-template #number>
+        <div class="form-group mb-2">
+          <label for="specification-minNumber" class="form-label">Specification Minimum Number</label>
+          <input formControlName="specificationMinNumber" type="text" class="form-control" [ngClass]="{
+                'is-invalid': hasAnyError(specificationForm, 'specificationName')
+              }" />
+        </div>
+        <div class="form-group mb-2">
+          <label for="specification-maxNumber" class="form-label">Specification Maximum Number</label>
+          <input formControlName="specificationMaxNumber" type="text" class="form-control" [ngClass]="{
+                'is-invalid': hasAnyError(specificationForm, 'specificationMaxNumber')
+              }" />
+        </div>
+      </ng-template>
+
+
+
+      <button class="btn w-10 btn-success mb-3 mt-2" type="submit">
+        Create
+      </button>
+    </form>
+
+    <div *ngIf="this.selectedSubcategory != ''">
+      <div *ngIf="
+            this.specifications === undefined || this.specifications.length == 0;
+            then noSpecifications;
+            else table
+          "></div>
+
+
+      <ng-template #noSpecifications>
+        <h6 class="mt-3">There are no specifications for the selected subcategory!</h6>
+      </ng-template>
+
+      <ng-template #table>
+        <h3 class="mt-2">Delete Specification</h3>
+        <table class="table table-hover">
+          <thead class="text-center">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Min Text Size</th>
+              <th scope="col">Max Text Size</th>
+              <th scope="col">Min Number</th>
+              <th scope="col">Max Number</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr *ngFor="let specification of specifications; let i=index">
+              <td>{{i+1}}</td>
+              <td scope="row">{{ specification.name }}</td>
+              <td>{{specification.type}}</td>
+              <div *ngIf="specification.type == 'Number' then number"></div>
+              <div *ngIf="specification.type == 'BigText' || specification.type == 'SmallText' then text"></div>
+              <div *ngIf="specification.type == 'CheckBox' then checkbox"></div>
+              <ng-template #number>
+                <td>
+                  <fa-icon class="xmark" [icon]="faXmark"></fa-icon>
+                </td>
+                <td>
+                  <fa-icon class="xmark" [icon]="faXmark"></fa-icon>
+                </td>
+                <td>{{specification.minNumber}}</td>
+                <td>{{specification.maxNumber}}</td>
+              </ng-template>
+              <ng-template #text>
+                <td>{{specification.minTextSize}}</td>
+                <td>{{specification.maxTextSize}}</td>
+                <td>
+                  <fa-icon class="xmark" [icon]="faXmark"></fa-icon>
+                </td>
+                <td>
+                  <fa-icon class="xmark" [icon]="faXmark"></fa-icon>
+                </td>
+              </ng-template>
+              <ng-template #checkbox>
+                <td>
+                  <fa-icon class="xmark" [icon]="faXmark"></fa-icon>
+                </td>
+                <td>
+                  <fa-icon class="xmark" [icon]="faXmark"></fa-icon>
+                </td>
+                <td>
+                  <fa-icon class="xmark" [icon]="faXmark"></fa-icon>
+                </td>
+                <td>
+                  <fa-icon class="xmark" [icon]="faXmark"></fa-icon>
+                </td>
+              </ng-template>
+              <td>
+                <button (click)="onDelete(specification.uid, specification.name)" class="btn-danger btn">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </div>
+  </div>
+
 </div>

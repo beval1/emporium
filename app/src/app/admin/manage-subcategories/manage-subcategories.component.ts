@@ -20,12 +20,15 @@ import { NotificationsService } from 'src/app/notification/services/notification
 })
 export class ManageSubcategoriesComponent implements OnInit {
   categoriesSubscription: Subscription;
-  subcategoriesSubscription: Subscription;
+  subcategoriesSubscription: Subscription = new Subscription;
   subcategoryForm: FormGroup;
   categories: ICategory[] | undefined;
   subcategories: ISubcategory[] | undefined;
+  selectedCategory: string = '';
+  fileToUpload: File | null | undefined = null;
   hasFieldError = hasFieldError;
   hasAnyError = hasAnyError;
+  
 
   constructor(
     private fb: FormBuilder,
@@ -35,18 +38,13 @@ export class ManageSubcategoriesComponent implements OnInit {
   ) {
     this.subcategoryForm = this.fb.group({
       subcategoryName: ['', [Validators.required]],
-      parentCategory: ['', Validators.required],
+      // parentCategory: ['', Validators.required],
     });
 
     this.categoriesSubscription = this.categoriesService
       .getAllCategories()
       .subscribe((categories: ICategory[]) => {
         this.categories = categories;
-      });
-    this.subcategoriesSubscription = this.subcategoriesService
-      .getAllSubCategories()
-      .subscribe((subcategories: ISubcategory[]) => {
-        this.subcategories = subcategories;
       });
   }
 
@@ -64,10 +62,11 @@ export class ManageSubcategoriesComponent implements OnInit {
     }
 
     const subcategoryName = this.subcategoryForm.get('subcategoryName')?.value;
-    const parentCategory = this.subcategoryForm.get('parentCategory')?.value;
+    // const parentCategory = this.subcategoryForm.get('parentCategory')?.value;
+    const parentCategory = this.selectedCategory;
 
     this.subcategoriesService
-      .createSubCategory(subcategoryName, parentCategory)
+      .createSubcategory(subcategoryName, parentCategory, this.fileToUpload)
       .then(() =>
         this.notificationsService.showSuccess(
           'Subcategory created successfully!'
@@ -78,5 +77,42 @@ export class ManageSubcategoriesComponent implements OnInit {
       });
 
     resetForm(this.subcategoryForm);
+    this.fileToUpload = null;
+  }
+
+  onCategoryChange() {
+    resetForm(this.subcategoryForm);
+    this.subcategories = [];
+
+    this.subcategoriesSubscription = this.subcategoriesService
+    .getAllSubcategoriesForCategory(this.selectedCategory)
+    .subscribe((subcategories: ISubcategory[]) => {
+      this.subcategories = subcategories;
+    });
+  }
+
+  onUpload(e: EventTarget | null) {
+    const eventAsElement = e as HTMLInputElement;
+
+    if (eventAsElement == null) {
+      return;
+    }
+
+    this.fileToUpload = eventAsElement.files?.item(0)
+  }
+
+  onDelete(subcategoryId: string, subcategoryName: string){
+    if (confirm(`Are you sure, you want to delete ${subcategoryName}?`)){
+      this.subcategoriesService.deleteSubCategoryById(this.selectedCategory, subcategoryId)
+      .then(() => this.notificationsService.showSuccess(`Deleted "${subcategoryName}" successfully!`))
+      .catch(error => this.notificationsService.showError(`Error: ${error.message}`));
+    }
+  }
+
+  isCategorySelected() {
+      if (this.selectedCategory === ''){
+        return false;
+      }
+      return true;
   }
 }

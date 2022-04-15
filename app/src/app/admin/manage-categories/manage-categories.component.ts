@@ -20,6 +20,7 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   categoryForm: FormGroup;
   categories: ICategory[] | undefined;
+  fileToUpload: File | null | undefined = null;
   hasFieldError = hasFieldError;
   hasAnyError = hasAnyError;
 
@@ -36,7 +37,7 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
       .getAllCategories()
       .subscribe((categories: ICategory[]) => {
         this.categories = categories;
-      });
+    });
   }
 
   ngOnInit(): void {}
@@ -53,12 +54,28 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
 
     const categoryName = this.categoryForm.get('categoryName')?.value;
 
-    this.categoriesService.createCategory(categoryName).then(
+    this.categoriesService.createCategory(categoryName, this.fileToUpload).then(
       () => this.notificationsService.showSuccess('Category created successfully!')).catch((error) => {
       this.notificationsService.showError(`Error: ${error.message}`);
     })
-    
-
     resetForm(this.categoryForm);
+  }
+
+  onDelete(categoryId: string, categoryName: string){
+    if (confirm(`Are you sure, you want to delete ${categoryName}?`)){
+      this.categoriesService.deleteCategoryById(categoryId)
+      .then(() => this.notificationsService.showSuccess(`Deleted "${categoryName}" successfully!`))
+      .catch(error => this.notificationsService.showError(`Error: ${error.message}`));
+    }
+  }
+
+  onUpload(e: EventTarget | null) {
+    const eventAsElement = e as HTMLInputElement;
+
+    if (eventAsElement == null) {
+      return;
+    }
+
+    this.fileToUpload = eventAsElement.files?.item(0)
   }
 }

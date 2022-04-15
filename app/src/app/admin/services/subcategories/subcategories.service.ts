@@ -1,57 +1,79 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
+import { AngularFirestore,
   AngularFirestoreCollection,
-  AngularFirestoreDocument,
+  AngularFirestoreDocument 
 } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
-import { first, take, tap } from 'rxjs/operators';
-import { ICategory } from 'src/app/shared/interfaces/ICategory';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { Observable, firstValueFrom, first } from 'rxjs';
 import { ISubcategory } from 'src/app/shared/interfaces/ISubcategory';
+import { ICategory } from 'src/app/shared/interfaces/ICategory';
 import { CategoriesService } from '../categories/categories.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SubcategoriesService {
-  private subcategories: AngularFirestoreCollection<ISubcategory>;
-
   constructor(
     private fireStore: AngularFirestore,
-    private categoriesService: CategoriesService
+    private fireStorage: AngularFireStorage,
+    private categoriesService: CategoriesService,
+  ) {}
+
+  getSubcategoryById(
+    categoryId: string,
+    subcategoryId: string
+  ): Observable<ISubcategory | undefined> {
+    return this.fireStore
+      .collection<ISubcategory>(`categories/${categoryId}/subcategories`)
+      .doc(subcategoryId)
+      .valueChanges();
+  }
+
+  getAllSubcategoriesForCategory(
+    categoryId: string
+  ): Observable<ISubcategory[]> {
+    return this.fireStore
+      .collection<ISubcategory>(`categories/${categoryId}/subcategories`)
+      .valueChanges();
+  }
+
+  async createSubcategory(
+    categoryName: string,
+    categoryId: string,
+    picture?: File | null
   ) {
-    this.subcategories = fireStore.collection<ISubcategory>('subcategories');
-  }
-
-  getSubCategoryById(categoryId: string): Observable<ISubcategory | undefined> {
-    return this.subcategories.doc(categoryId).valueChanges();
-  }
-
-  getAllSubCategories(): Observable<ISubcategory[]> {
-    return this.subcategories.valueChanges();
-  }
-
-  async createSubCategory(categoryName: string, parentId: string, picture?: string | null ) {
     const subcategoryId = this.fireStore.createId();
+
+    let pictureUrl: string = '';
+    if (picture != null) {
+      const filePath = `subcategories/${subcategoryId}`;
+      const fileRef = this.fireStorage.ref(filePath);
+      //upload the picture
+      const upload = await this.fireStorage.upload(filePath, picture);
+      pictureUrl = await firstValueFrom(fileRef.getDownloadURL());
+    }
 
     const subcategory: ISubcategory = {
       name: categoryName,
       uid: subcategoryId,
-      parentCategory: parentId,
-      picture: picture || null,
-      specifications: []
+      parentCategory: categoryId,
+      picture: pictureUrl || null,
+      specifications: [],
     };
 
-    await this.subcategories.doc(subcategoryId).set(subcategory);
+    await this.fireStore
+      .collection<ISubcategory>(`categories/${categoryId}/subcategories`)
+      .doc(subcategoryId)
+      .set(subcategory);
 
     this.categoriesService
-      .getCategoryById(parentId)
+      .getCategoryById(categoryId)
       .pipe(first())
       .subscribe((category) => {
         const categoryRef: AngularFirestoreDocument<ICategory> =
-          this.fireStore.doc(`categories/${parentId}`);
+          this.fireStore.doc(`categories/${categoryId}`);
         const updatedCategory: ICategory = {
-          uid: parentId,
+          uid: categoryId,
           name: category!.name,
           subcategories: [...category!.subcategories, subcategoryId],
           picture: category?.picture || null,
@@ -60,19 +82,12 @@ export class SubcategoriesService {
           merge: true,
         });
       });
-
-    // const categoryRef: AngularFirestoreDocument<ICategory> = this.fireStore.doc(`categories/${parent}`)
-    //   const updatedCategory: ICategory = {
-    //     uid: parentId,
-    //     name: parentName,
-    //     subcategories: [...parentSubcategories, subcategoryId]
-    //   }
-    //   categoryRef.set(updatedCategory, {
-    //     merge: true,
-    //   });
   }
 
-  async deleteSubCategoryById(categoryId: string) {
-    await this.subcategories.doc(categoryId).delete();
+  async deleteSubCategoryById(categoryId: string, subcategoryId: string) {
+    await this.fireStore
+      .collection<ISubcategory>(`categories/${categoryId}/subcategories`)
+      .doc(subcategoryId)
+      .delete();
   }
 }
