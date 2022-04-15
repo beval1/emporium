@@ -1,0 +1,27 @@
+<div *ngIf="
+this.categories === undefined || this.categories.length == 0;
+then noCategories;
+else showCategories"></div>
+
+<ng-template #noCategories>
+  <h5>There are no categories!</h5>
+</ng-template>
+<ng-template #showCategories>
+  <div class="wrapper d-flex flex-row justify-content-start flex-wrap">
+    <div *ngFor="let category of this.categories">
+      <div class="category-card rounded-container shadow bg-white d-flex flex-column m-3">
+        <div class="category-card-header rounded-container pt-2"></div>
+        <div class="category-card-body">
+          <img [src]="
+          category.picture !== undefined
+            ? category.picture
+            : '../../../assets/no-thumbnail.jpg'
+        " alt="Category Picture" />
+        </div>
+        <div class="category-card-footer text-center">
+          <p>{{category.name}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

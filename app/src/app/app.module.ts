@@ -23,6 +23,7 @@ import { AdminModule } from './admin/admin.module';
 import { ProductDetailsComponent } from './pages/product-details/product-details.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { NotificationModule } from './notification/notification.module';
+import { CategoriesComponent } from './pages/categories/categories.component';
 // import { NotificationContainerComponent } from './notification/notification-container/notification-container.component';
 
 @NgModule({
@@ -33,6 +34,7 @@ import { NotificationModule } from './notification/notification.module';
     RegistrationCompletedComponent,
     ProductDetailsComponent,
     WishlistComponent,
+    CategoriesComponent,
   ],
   imports: [
     BrowserModule,

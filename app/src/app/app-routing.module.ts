@@ -20,9 +20,12 @@ import { SellerGuard } from './shared/guards/seller.guard';
 import { UserGuard } from './shared/guards/user.guard';
 import { ProfileComponent } from './user/profile/profile.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
+import { CategoriesComponent } from './pages/categories/categories.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: 'categories', component: CategoriesComponent },
+  //Auth
   { path: 'login', component: LoginComponent, canActivate: [GuestGuard]},
   { path: 'register', component: RegisterComponent, canActivate: [GuestGuard]},
   //User

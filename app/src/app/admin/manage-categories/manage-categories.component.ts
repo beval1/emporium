@@ -59,6 +59,7 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
       this.notificationsService.showError(`Error: ${error.message}`);
     })
     resetForm(this.categoryForm);
+    this.fileToUpload = null;
   }
 
   onDelete(categoryId: string, categoryName: string){

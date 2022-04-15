@@ -7,11 +7,21 @@
       [delay]="notification.delay || 5000"
       (hidden)="notificationsService.remove(notification)"
     >
-      <ng-template [ngIf]="isTemplate(notification)" [ngIfElse]="text">
-        <ng-template [ngTemplateOutlet]="notification.textOrTpl"></ng-template>
-      </ng-template>
-
-      <ng-template #text>{{ notification.textOrTpl }}</ng-template>
-
+      
+    <ng-template *ngIf="notification.Tpl=='error' then error"></ng-template>
+    <ng-template *ngIf="notification.Tpl=='success' then success"></ng-template>
+    <ng-template #error>
+      <span class=""><fa-icon
+        class="exclamation"
+        [icon]="faCircleExclamation"
+      ></fa-icon> {{notification.text}}</span>
+    </ng-template>
+    <ng-template #success>
+      <span class=""><fa-icon
+        class="check"
+        [icon]="faCheck"
+      ></fa-icon> {{notification.text}}</span>
+    </ng-template>
+      
 </ngb-toast>
 
