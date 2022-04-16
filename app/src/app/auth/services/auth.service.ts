@@ -43,15 +43,15 @@ export class AuthService {
   private async signUp(
     email: string,
     password: string,
-    mobilePhone: string,
-    personalName: string,
-    userRole: string
+    displayName: string,
+    userRole: string,
+    mobilePhone?: string,
   ) {
+
     return await this.fireAuth
       .createUserWithEmailAndPassword(email, password)
-
       .then((result) => {
-        this.setUserData(result.user, userRole, mobilePhone, personalName);
+        this.setUserData(result.user, userRole, displayName, mobilePhone);
         console.log(result.user);
         this.router.navigateByUrl('/registration-completed')
       });
@@ -63,26 +63,29 @@ export class AuthService {
     mobilePhone: string,
     displayName: string
   ) {
-    return this.signUp(email, password, mobilePhone, displayName, 'user');
+    return this.signUp(email, password, displayName, 'user', mobilePhone);
   }
 
   signUpSeller(
     email: string,
     password: string,
-    mobilePhone: string,
     companyName: string,
+    mobilePhone?: string,
   ) {
-    return this.signUp(email, password, mobilePhone, companyName, 'seller');
+    return this.signUp(email, password, companyName, 'seller', mobilePhone);
   }
 
   setUserData(
     user: firebase.default.User | null,
     userRole: string,
-    mobilePhone: string,
-    displayName: string
+    displayName: string,
+    mobilePhone?: string,
   ) {
     if (!user) {
       return;
+    }
+    if (!mobilePhone){
+      mobilePhone = '';
     }
 
     const userRef: AngularFirestoreDocument<any> = this.fireStore.doc(

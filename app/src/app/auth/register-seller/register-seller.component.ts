@@ -76,7 +76,7 @@ export class RegisterSellerComponent implements OnInit {
     const companyName = this.registerForm.get('companyName')?.value;
 
     this.authService
-      .signUpSeller(email, password, mobilePhone, companyName)
+      .signUpSeller(email, password, companyName)
       .then(() =>
         this.notificationService.showSuccess(
           'Registered as SELLER successfully!'
