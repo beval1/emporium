@@ -1,0 +1,30 @@
+<div *ngIf="
+this.subcategories === undefined || this.subcategories.length == 0;
+then noSubcategories;
+else showSubcategories"></div>
+
+<ng-template #noSubcategories>
+  <h5>There are no subcategories!</h5>
+</ng-template>
+<ng-template #showSubcategories>
+  <div class="wrapper d-flex flex-row justify-content-start flex-wrap">
+
+    <div *ngFor="let subcategory of this.subcategories">
+      <a class="subcategory-link" [routerLink]="[subcategory.uid]">
+        <div class="subcategory-card rounded-container shadow bg-white d-flex flex-column m-3">
+          <div class="subcategory-card-header rounded-container"></div>
+          <div class="subcategory-card-body">
+            <img class="subcategory-image" [src]="
+          subcategory.picture !== null
+            ? subcategory.picture
+            : '../../../assets/no-thumbnail.jpg'
+        " alt="Category Picture" />
+          </div>
+          <div class="subcategory-card-footer text-center">
+            <p>{{subcategory.name}}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</ng-template>

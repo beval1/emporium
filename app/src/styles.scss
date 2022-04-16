@@ -15,9 +15,24 @@ body {
 
 footer, nav{
     background-color: $main-theme-color;
-} 
+}
+
+.active {
+  background-color: $main-theme-color !important;
+}
+
+.category-image, .subcategory-image  {
+  // object-fit: cover;
+  height: 250px;
+  width: 250px;
+  max-width: 30vw;
+  // max-height: 100%;
+}
+
+.category-link, .subcategory-link {
+  text-decoration: none;
+  font-size: larger;
+  color: black;
+}
 
 
-// footer {
-//     background-color: #FBBE81;
-// }

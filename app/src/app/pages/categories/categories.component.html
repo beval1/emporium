@@ -9,19 +9,21 @@ else showCategories"></div>
 <ng-template #showCategories>
   <div class="wrapper d-flex flex-row justify-content-start flex-wrap">
     <div *ngFor="let category of this.categories">
-      <div class="category-card rounded-container shadow bg-white d-flex flex-column m-3">
-        <div class="category-card-header rounded-container pt-2"></div>
-        <div class="category-card-body">
-          <img [src]="
-          category.picture !== undefined
+      <a class="category-link" [routerLink]="[category.uid]">
+        <div class="category-card rounded-container shadow bg-white d-flex flex-column m-3">
+          <div class="category-card-header rounded-container"></div>
+          <div class="category-card-body">
+            <img class="category-image" [src]="
+          category.picture !== null
             ? category.picture
             : '../../../assets/no-thumbnail.jpg'
         " alt="Category Picture" />
+          </div>
+          <div class="category-card-footer text-center">
+            <p>{{category.name}}</p>
+          </div>
         </div>
-        <div class="category-card-footer text-center">
-          <p>{{category.name}}</p>
-        </div>
-      </div>
+      </a>
     </div>
   </div>
 </ng-template>

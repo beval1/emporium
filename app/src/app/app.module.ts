@@ -24,6 +24,8 @@ import { ProductDetailsComponent } from './pages/product-details/product-details
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { NotificationModule } from './notification/notification.module';
 import { CategoriesComponent } from './pages/categories/categories.component';
+import { SubcategoriesComponent } from './pages/subcategories/subcategories.component';
+import { SellerModule } from './seller/seller.module';
 // import { NotificationContainerComponent } from './notification/notification-container/notification-container.component';
 
 @NgModule({
@@ -35,6 +37,7 @@ import { CategoriesComponent } from './pages/categories/categories.component';
     ProductDetailsComponent,
     WishlistComponent,
     CategoriesComponent,
+    SubcategoriesComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +46,7 @@ import { CategoriesComponent } from './pages/categories/categories.component';
     CoreModule,
     AuthModule,
     AdminModule,
+    SellerModule,
     SharedModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

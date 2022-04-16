@@ -61,25 +61,25 @@ export class AuthService {
     email: string,
     password: string,
     mobilePhone: string,
-    personalName: string
+    displayName: string
   ) {
-    return this.signUp(email, password, mobilePhone, personalName, 'user');
+    return this.signUp(email, password, mobilePhone, displayName, 'user');
   }
 
   signUpSeller(
     email: string,
     password: string,
     mobilePhone: string,
-    personalName: string
+    companyName: string,
   ) {
-    return this.signUp(email, password, mobilePhone, personalName, 'seller');
+    return this.signUp(email, password, mobilePhone, companyName, 'seller');
   }
 
   setUserData(
     user: firebase.default.User | null,
     userRole: string,
     mobilePhone: string,
-    personalName: string
+    displayName: string
   ) {
     if (!user) {
       return;
@@ -92,7 +92,7 @@ export class AuthService {
       uid: user.uid,
       email: user.email,
       emailVerified: user.emailVerified,
-      displayName: personalName,
+      displayName: displayName,
       photoURL: user.photoURL,
       phoneNumber: mobilePhone,
       userRole: userRole,

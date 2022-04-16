@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { AddProductComponent } from './add-product/add-product.component';
 import { AllProductsComponent } from './all-products/all-products.component';
 import { SellerDashboardComponent } from './seller-dashboard/seller-dashboard.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SellerAsideComponent } from './seller-aside/seller-aside.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -10,10 +13,12 @@ import { SellerDashboardComponent } from './seller-dashboard/seller-dashboard.co
   declarations: [
     AddProductComponent,
     AllProductsComponent,
-    SellerDashboardComponent
+    SellerDashboardComponent,
+    SellerAsideComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule,
   ]
 })
 export class SellerModule { }

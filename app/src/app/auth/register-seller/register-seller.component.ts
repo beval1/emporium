@@ -1,20 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { hasFieldError, validateAllFormFields, passwordMissmatch, isFieldTouched, hasAnyError } from 'src/app/shared/utils/validate';
+import {
+  hasFieldError,
+  validateAllFormFields,
+  passwordMissmatch,
+  isFieldTouched,
+  hasAnyError,
+} from 'src/app/shared/utils/validate';
 import { validateEmail } from 'src/app/shared/validators/emailValidator';
 import { validatePhone } from 'src/app/shared/validators/mobilephoneValidator';
 import { samePasswordValidator } from 'src/app/shared/validators/samePasswordValidator';
 import { AuthService } from '../services/auth.service';
-import { faUser, faPhone, faEnvelope, faKey} from '@fortawesome/free-solid-svg-icons';
+import {
+  faUser,
+  faPhone,
+  faEnvelope,
+  faKey,
+  faBuilding,
+} from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { NotificationsService } from 'src/app/notification/services/notifications.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['../auth-components.scss']
+  selector: 'app-register-seller',
+  templateUrl: './register-seller.component.html',
+  styleUrls: ['./register-seller.component.scss'],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterSellerComponent implements OnInit {
   registerForm: FormGroup;
   hasFieldError = hasFieldError;
   passwordMissmatch = passwordMissmatch;
@@ -26,13 +38,18 @@ export class RegisterComponent implements OnInit {
   faPhone = faPhone;
   faEnvelope = faEnvelope;
   faKey = faKey;
+  faBuilding = faBuilding;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,
-    private notificationService: NotificationsService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private notificationService: NotificationsService
+  ) {
     this.registerForm = this.fb.group(
       {
-        personalName: ['', [Validators.required, Validators.minLength(3)]],
-        mobilePhone: ['', [Validators.required, validatePhone]],
+        // displayName: ['', [Validators.required, Validators.minLength(3)]],
+        companyName: ['', [Validators.minLength(3)]],
+        // mobilePhone: ['', [Validators.required, validatePhone]],
         email: ['', [Validators.required, validateEmail]],
         password: ['', [Validators.required, Validators.minLength(8)]],
         confirmPassword: ['', [Validators.required]],
@@ -42,7 +59,7 @@ export class RegisterComponent implements OnInit {
     this.serviceError = '';
   }
 
-  ngOnInit(): void {}
+  ngOnInit() {}
 
   registerHandler() {
     if (this.registerForm.invalid || this.registerForm.pending) {
@@ -54,18 +71,20 @@ export class RegisterComponent implements OnInit {
 
     const email = this.registerForm.get('email')?.value;
     const password = this.registerForm.get('password')?.value;
-    const mobilePhone = this.registerForm.get('mobilePhone')?.value;
-    const personalName = this.registerForm.get('personalName')?.value;
+    // const mobilePhone = this.registerForm.get('mobilePhone')?.value;
+    // const displayName = this.registerForm.get('displayName')?.value;
+    const companyName = this.registerForm.get('companyName')?.value;
 
     this.authService
-      .signUpUser(email, password, mobilePhone, personalName)
-      .then(() => this.notificationService.showSuccess('Registered as USER successfully!'))
+      .signUpSeller(email, password, mobilePhone, companyName)
+      .then(() =>
+        this.notificationService.showSuccess(
+          'Registered as SELLER successfully!'
+        )
+      )
       .catch((error) => {
         this.serviceError = error.message;
-        console.log(error.message)
+        console.log(error.message);
       });
-
   }
-
-
 }

@@ -5,6 +5,7 @@ import { hasFieldError, validateAllFormFields } from 'src/app/shared/utils/valid
 import { faKey, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { NotificationsService } from 'src/app/notification/services/notifications.service';
 
 
 @Component({
@@ -21,13 +22,14 @@ export class LoginComponent implements OnInit {
   closeResult = '';
   @ViewChild('content') private content: any;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private modalService: NgbModal) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private modalService: NgbModal,
+    private notificationService: NotificationsService) {
     this.serviceError = '';
     this.loginForm = this.fb.group({
-        email: ['', [Validators.required]], //no need for email validation here... 
+        email: ['', [Validators.required]], //no need for email validation here...
         password: ['', [Validators.required]]
       });
-      
+
   }
 
   ngOnInit(): void {}
@@ -50,11 +52,15 @@ export class LoginComponent implements OnInit {
 
     this.authService
       .signIn(email, password)
+      .then(() => {
+        this.modalService.dismissAll();
+        this.notificationService.showSuccess('Logged in successfully!')
+      })
       .catch((error) => {
         console.log(error.message)
         this.serviceError = error.message
-      })   
-    this.modalService.dismissAll()
+      })
+
   }
 
   open(content: any) {
@@ -73,5 +79,10 @@ export class LoginComponent implements OnInit {
     } else {
       return `with: ${reason}`;
     }
+  }
+
+  onLinkClick(path: string){
+    this.modalService.dismissAll();
+    this.router.navigateByUrl(path);
   }
 }

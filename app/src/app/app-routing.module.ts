@@ -21,19 +21,23 @@ import { UserGuard } from './shared/guards/user.guard';
 import { ProfileComponent } from './user/profile/profile.component';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { CategoriesComponent } from './pages/categories/categories.component';
+import { SubcategoriesComponent } from './pages/subcategories/subcategories.component';
+import { RegisterSellerComponent } from './auth/register-seller/register-seller.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'categories', component: CategoriesComponent },
+  { path: 'categories/:categoryId', component: SubcategoriesComponent, },
   //Auth
   { path: 'login', component: LoginComponent, canActivate: [GuestGuard]},
   { path: 'register', component: RegisterComponent, canActivate: [GuestGuard]},
+  { path: 'register-seller', component: RegisterSellerComponent, canActivate: [GuestGuard]},
   //User
   { path: 'user/profile', component: ProfileComponent, canActivate: [LoggedGuard, UserGuard]},
   { path: 'user/favourites', component: WishlistComponent}, //no guard for the whishlist
   //{ path: 'cart', component: CartComponent}, //no guard for the cart
   //Admin
-  { path: 'admin', component: DashboardComponent, canActivate: [LoggedGuard, AdminGuard]},
+  { path: 'admin/dashboard', component: DashboardComponent, canActivate: [LoggedGuard, AdminGuard]},
   { path: 'admin/manage-categories', component: ManageCategoriesComponent, canActivate: [LoggedGuard, AdminGuard]},
   { path: 'admin/manage-subcategories', component: ManageSubcategoriesComponent, canActivate: [LoggedGuard, AdminGuard]},
   { path: 'admin/manage-specifications', component: ManageSpecificationsComponent, canActivate: [LoggedGuard, AdminGuard]},
@@ -44,7 +48,7 @@ const routes: Routes = [
   { path: 'seller/all-products', component: AllProductsComponent, canActivate: [LoggedGuard, SellerGuard]},
   { path: 'registration-completed', component: RegistrationCompletedComponent},
   { path: '404', component: NotFoundComponent, pathMatch: 'full' },
-  { path: '**', redirectTo: '404' },
+  // { path: '**', redirectTo: '404' },
 
 ];
 

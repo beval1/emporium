@@ -5,6 +5,7 @@
   </div> -->
   <div class="modal-body">
     <div class=" ">
+      <input type="text" autofocus="autofocus" style="display:none" />
       <form [formGroup]="loginForm" (ngSubmit)="loginHandler()" class="container-fluid p-5 m-auto">
         <h1 class="h3 mb-3 font-weight-normal text-center">Log in</h1>
 
@@ -46,25 +47,27 @@
         <button class="btn btn-success btn-block mt-3 w-100" type="submit">
           Log in
         </button>
-
         <hr />
-
         <ul class="d-flex list-unstyled justify-content-between">
           <li>
-            <a routerLink="/register" class="" type="button">
-              Create new User account
+            <!-- routerLink="/register" -->
+            <a routerLink="" (click)="onLinkClick('/register')" class="">
+              Create User account
             </a>
           </li>
           <li>
-            <a routerLink="/register-seller" class="" type="button">
-              Create new Seller account
+            <!-- routerLink="/register-seller" -->
+            <a routerLink="" (click)="onLinkClick('/register-seller')" class="" >
+              Create Seller account
             </a>
           </li>
         </ul>
-        <a routerLink="/forgot-password" class="d-flex justify-content-center" type="button">
+        <!-- routerLink="/forgot-password"  -->
+        <a routerLink="" (click)="onLinkClick('/forgot-password')" class="d-flex justify-content-center" >
           Forgot password?
         </a>
       </form>
+
     </div>
   </div>
 </ng-template>

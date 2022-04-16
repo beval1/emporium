@@ -2,6 +2,11 @@
   <div id="sidebar" class="d-flex flex-column sidebar shadow bg-white rounded-container py-2">
     <ul class="nav nav-pills flex-column">
       <li>
+        <a routerLink="/admin/dashboard" class="nav-link" [ngClass]="{
+                'active': getCurrentRoute() == '/admin/dashboard'
+            }">Dashboard</a>
+      </li>
+      <li>
         <a routerLink="/admin/manage-categories" class="nav-link" [ngClass]="{
                 'active': getCurrentRoute() == '/admin/manage-categories'
             }">Manage Categories</a>

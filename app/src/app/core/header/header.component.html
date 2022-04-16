@@ -22,7 +22,7 @@
     <div *ngIf="(isUserAdmin$ | async) == true">
         <ul class="nav">
           <li><a (click)="signOut()" routerLink="/login" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faUser"></fa-icon>Log out</a></li>
-          <li><a routerLink="/admin" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faCogs"></fa-icon>Admin Panel</a></li>
+          <li><a routerLink="/admin/dashboard" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faCogs"></fa-icon>Admin Panel</a></li>
         </ul>
     </div>
     <div *ngIf="(isSeller$ | async) == true">
@@ -37,6 +37,6 @@
         <li><a routerLink="/favourites" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faHeart"></fa-icon>Favourites</a></li>
         <li><a routerLink="/cart" class="nav-link text-dark text-decoration-none h5"><fa-icon [icon]="faShoppingCart"></fa-icon>Cart</a></li>
       </ul>
-    </div> 
+    </div>
   </div>
 </header>
