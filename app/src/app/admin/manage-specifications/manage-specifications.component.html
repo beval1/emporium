@@ -44,7 +44,7 @@
               'is-invalid': hasAnyError(specificationForm, 'specificationName')
             }" />
         <div class="text-danger mb-1" *ngIf="hasFieldError(specificationForm, 'specificationName', 'required')">
-          Category name is required!
+          Specification Name is required!
         </div>
       </div>
 
@@ -54,7 +54,7 @@
         <div class="form-group mb-2">
           <label for="specification-minTextSize" class="form-label">Specification Minimum Text Size</label>
           <input formControlName="specificationMinTextSize" type="text" class="form-control" [ngClass]="{
-                'is-invalid': hasAnyError(specificationForm, 'specificationName')
+                'is-invalid': hasAnyError(specificationForm, 'specificationMinTextSize')
               }" />
         </div>
         <div class="form-group mb-2">
@@ -68,7 +68,7 @@
         <div class="form-group mb-2">
           <label for="specification-minNumber" class="form-label">Specification Minimum Number</label>
           <input formControlName="specificationMinNumber" type="text" class="form-control" [ngClass]="{
-                'is-invalid': hasAnyError(specificationForm, 'specificationName')
+                'is-invalid': hasAnyError(specificationForm, 'specificationMinNumber')
               }" />
         </div>
         <div class="form-group mb-2">

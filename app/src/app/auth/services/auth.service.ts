@@ -7,23 +7,25 @@ import {
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { switchMap, tap, map } from 'rxjs/operators';
-import { Observable, of} from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { NotificationsService } from 'src/app/notification/services/notifications.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  user: Observable<IUser  | undefined | null>;
+  user: Observable<IUser | undefined | null>;
 
   constructor(
-    public fireStore: AngularFirestore, // Inject Firestore service
-    public fireAuth: AngularFireAuth, // Inject Firebase auth service
-    public router: Router
+    private fireStore: AngularFirestore, // Inject Firestore service
+    private fireAuth: AngularFireAuth, // Inject Firebase auth service
+    private router: Router,
+    private notificationsService: NotificationsService
   ) {
     this.user = this.fireAuth.authState.pipe(
       switchMap((user) => {
         if (user) {
-          localStorage.setItem('user', JSON.stringify(user))
+          localStorage.setItem('user', JSON.stringify(user));
           return this.fireStore.doc<IUser>(`users/${user.uid}`).valueChanges();
         } else {
           return of(null);
@@ -34,9 +36,10 @@ export class AuthService {
 
   // Sign in with email/password
   async signIn(email: string, password: string) {
-    await this.fireAuth
-      .signInWithEmailAndPassword(email, password).then()
-    this.router.navigateByUrl('/')
+    await this.fireAuth.signInWithEmailAndPassword(email, password).then(() => {
+      this.notificationsService.showSuccess('Logged in successfully!');
+    });
+    this.router.navigateByUrl('/');
   }
 
   // Sign up with email/password
@@ -45,16 +48,19 @@ export class AuthService {
     password: string,
     displayName: string,
     userRole: string,
-    mobilePhone?: string,
+    mobilePhone?: string
   ) {
-
     return await this.fireAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
         this.setUserData(result.user, userRole, displayName, mobilePhone);
         console.log(result.user);
-        this.router.navigateByUrl('/registration-completed')
-      });
+        this.router.navigateByUrl('/registration-completed');
+      })
+      .then(() =>
+        this.notificationsService.showSuccess(`Registered as ${userRole.toUpperCase()} successfully!`)
+      )
+
   }
 
   signUpUser(
@@ -70,7 +76,7 @@ export class AuthService {
     email: string,
     password: string,
     companyName: string,
-    mobilePhone?: string,
+    mobilePhone?: string
   ) {
     return this.signUp(email, password, companyName, 'seller', mobilePhone);
   }
@@ -79,12 +85,12 @@ export class AuthService {
     user: firebase.default.User | null,
     userRole: string,
     displayName: string,
-    mobilePhone?: string,
+    mobilePhone?: string
   ) {
     if (!user) {
       return;
     }
-    if (!mobilePhone){
+    if (!mobilePhone) {
       mobilePhone = '';
     }
 
@@ -106,44 +112,49 @@ export class AuthService {
     });
   }
 
-  isLoggedIn(): Observable<boolean>{
-    return this.user.pipe(map((user: IUser | null | undefined) => {
-      return user == null ? false : true;
-    },
-    ));
+  isLoggedIn(): Observable<boolean> {
+    return this.user.pipe(
+      map((user: IUser | null | undefined) => {
+        return user == null ? false : true;
+      })
+    );
   }
 
-  isSeller(): Observable<boolean>{
-    return this.user.pipe(map((user: IUser | null | undefined) => {
-      return user?.userRole === 'seller' ? true : false;
-    },
-    ));
+  isSeller(): Observable<boolean> {
+    return this.user.pipe(
+      map((user: IUser | null | undefined) => {
+        return user?.userRole === 'seller' ? true : false;
+      })
+    );
   }
 
-  isUser(): Observable<boolean>{
-    return this.user.pipe(map((user: IUser | null | undefined) => {
-      return user?.userRole === 'user' ? true : false;
-    },
-    ));
+  isUser(): Observable<boolean> {
+    return this.user.pipe(
+      map((user: IUser | null | undefined) => {
+        return user?.userRole === 'user' ? true : false;
+      })
+    );
   }
 
-  isAdmin(): Observable<boolean>{
-    return this.user.pipe(map((user: IUser | null | undefined) => {
-      return user?.userRole === 'admin' ? true : false;
-    },
-    ));
+  isAdmin(): Observable<boolean> {
+    return this.user.pipe(
+      map((user: IUser | null | undefined) => {
+        return user?.userRole === 'admin' ? true : false;
+      })
+    );
   }
 
   // Sign out
   async signOut() {
     console.log('logging out');
-    await this.fireAuth.signOut();
+    await this.fireAuth
+      .signOut()
+      .then(() => this.notificationsService.showSuccess('Logged out!'))
+      .catch((error) => this.notificationsService.showError(error));
     this.router.navigateByUrl('/');
   }
 
   get getCurrentUser() {
     return this.user;
   }
-
-
 }

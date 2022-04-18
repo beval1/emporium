@@ -18,8 +18,6 @@ import {
   faKey,
   faBuilding,
 } from '@fortawesome/free-solid-svg-icons';
-import { Router } from '@angular/router';
-import { NotificationsService } from 'src/app/notification/services/notifications.service';
 
 @Component({
   selector: 'app-register-seller',
@@ -40,11 +38,7 @@ export class RegisterSellerComponent implements OnInit {
   faKey = faKey;
   faBuilding = faBuilding;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private notificationService: NotificationsService
-  ) {
+  constructor(private fb: FormBuilder, private authService: AuthService) {
     this.registerForm = this.fb.group(
       {
         // displayName: ['', [Validators.required, Validators.minLength(3)]],
@@ -77,11 +71,6 @@ export class RegisterSellerComponent implements OnInit {
 
     this.authService
       .signUpSeller(email, password, companyName)
-      .then(() =>
-        this.notificationService.showSuccess(
-          'Registered as SELLER successfully!'
-        )
-      )
       .catch((error) => {
         this.serviceError = error.message;
         console.log(error.message);

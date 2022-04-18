@@ -1,9 +1,12 @@
-<app-header class=""></app-header>
-<app-navbar></app-navbar>
-<app-notification-container aria-live="polite" aria-atomic="true"></app-notification-container>
-<main class="container pb-4 pt-4">
-    <router-outlet></router-outlet>
-</main>
-<app-footer></app-footer> 
-
-
+<!-- footer fix when page is short -->
+<div class="wrapper">
+  <div>
+    <app-header class=""></app-header>
+    <app-navbar></app-navbar>
+    <app-notification-container aria-live="polite" aria-atomic="true"></app-notification-container>
+    <main class="container pb-4 pt-4">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  <app-footer id="footer"></app-footer>
+</div>

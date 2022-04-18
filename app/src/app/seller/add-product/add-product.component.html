@@ -1,1 +1,191 @@
-<p>add-product works!</p>
+<div class="container d-flex">
+  <app-seller-aside></app-seller-aside>
+  <div class="container shadow bg-white align-items-center rounded-container">
+    <h3 class="mt-2">Create Product</h3>
+    <div class="from-group mb-2 mt-3">
+      <label for="category" class="form-label">Category</label>
+      <select class="form-select" aria-label="Subcategory Select" id="category" [(ngModel)]="selectedCategory"
+        (ngModelChange)="onCategoryChange()">
+        <option value="" selected>Select Category</option>
+        <option *ngFor="let category of categories" [ngValue]="category.uid">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="from-group mb-2 mt-3" *ngIf="this.selectedCategory != ''">
+      <label for="parentSubcategory" class="form-label">Subcategory</label>
+      <select class="form-select" aria-label="Subcategory Select" id="parentSubcategory"
+        [(ngModel)]="selectedSubcategory" (ngModelChange)="onSubcategoryChange()">
+        <option value="" selected>Select Parent Subcategory</option>
+        <option *ngFor="let subcategory of subcategories" [ngValue]="subcategory.uid">
+          {{ subcategory.name }}
+        </option>
+      </select>
+    </div>
+
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()" *ngIf="this.selectedSubcategory != ''">
+      <div class="form-group mb-2">
+        <label for="product-name" class="form-label">Product Name</label>
+        <input formControlName="productName" type="text" class="form-control" [ngClass]="{
+            'is-invalid': hasAnyError(productForm, 'productName')
+          }" />
+        <div class="text-danger mb-1" *ngIf="hasFieldError(productForm, 'productName', 'required')">
+          Product Name is required!
+        </div>
+      </div>
+
+      <div class="form-group mb-2">
+        <label for="product-desc" class="form-label">Product Description</label>
+        <textarea formControlName="productDescription" class="form-control" [ngClass]="{
+            'is-invalid': hasAnyError(productForm, 'productDescription')
+          }"></textarea>
+        <div class="text-danger mb-1" *ngIf="hasFieldError(productForm, 'productDescription', 'maxlength')">
+          Product Description is exceeding the max length of 4096 symbols
+        </div>
+      </div>
+
+      <div class="form-group mb-2">
+        <label for="product-price" class="form-label">Product Price</label>
+        <input formControlName="productPrice" type="number" class="form-control" [ngClass]="{
+            'is-invalid': hasAnyError(productForm, 'productPrice')
+          }" />
+        <div class="text-danger mb-1" *ngIf="hasFieldError(productForm, 'productPrice', 'required')">
+          Product Price is required
+        </div>
+        <div class="text-danger mb-1" *ngIf="hasFieldError(productForm, 'productPrice', 'min')">
+          Product Price can't be negative
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <label class="form-label" for="product-images">Images</label>
+        <input
+          class="form-control"
+          id="product-images"
+          type="file"
+          accept=".png,.jpg"
+          multiple="multiple"
+          (change)="onUpload($event.target)"
+        />
+      </div>
+
+      <div *ngIf="specifications != undefined && specifications.length > 0">
+        <h4 class="mb-2 mt-3">Additional Specifications</h4>
+        <div class="specifications-wrapper" *ngFor="let specification of specifications; let i = index">
+          <div *ngIf="specification.type == 'Number'; then number"></div>
+          <div *ngIf="specification.type == 'SmallText'; then smalltext"></div>
+          <div *ngIf="specification.type == 'BigText'; then bigtext"></div>
+          <div *ngIf="specification.type == 'CheckBox'; then checkbox"></div>
+          <ng-template #number>
+            <div class="form-group mb-1 mt-2">
+              <label for="spec-{{ specification.uid }}" class="form-label">{{
+                specification.name
+              }}</label>
+              <input [formControlName]="specification.uid" type="number" class="form-control"
+                id="spec-{{ specification.uid }}" [ngClass]="{
+                  'is-invalid': hasAnyError(productForm, specification.uid)
+                }" />
+              <div class="text-danger mb-1 ml-1" *ngIf="hasFieldError(productForm, specification.uid, 'min')">
+                {{ specification.name }} can't be under
+                {{ specification.minNumber }}
+              </div>
+              <div class="text-danger mb-1 ml-1" *ngIf="hasFieldError(productForm, specification.uid, 'max')">
+                {{ specification.name }} can't be over
+                {{ specification.maxNumber }}
+              </div>
+              <div class="text-danger mb-1 ml-1" *ngIf="
+                  hasFieldError(productForm, specification.uid, 'required')
+                ">
+                {{ specification.name }} is required
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #smalltext>
+            <div class="form-group mb-1 mt-2">
+              <label for="spec-{{ specification.uid }}" class="form-label">{{
+                specification.name
+              }}</label>
+              <input [formControlName]="specification.uid" class="form-control" id="spec-{{ specification.uid }}"
+                [ngClass]="{
+                  'is-invalid': hasAnyError(productForm, specification.uid)
+                }" />
+              <div class="text-danger mb-1 ml-1" *ngIf="
+                  hasFieldError(productForm, specification.uid, 'minlength')
+                ">
+                {{ specification.name }} can't be under
+                {{ specification.minTextSize }} symbols
+              </div>
+              <div class="text-danger mb-1 ml-1" *ngIf="
+                  hasFieldError(productForm, specification.uid, 'maxlength')
+                ">
+                {{ specification.name }} can't be over
+                {{ specification.maxTextSize }} symbols
+              </div>
+              <div class="text-danger mb-1 ml-1" *ngIf="
+                  hasFieldError(productForm, specification.uid, 'required')
+                ">
+                {{ specification.name }} is required
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #bigtext>
+            <div class="form-group mt-3">
+              <label for="spec-{{ specification.uid }}" class="form-label">{{
+                specification.name
+              }}</label>
+              <textarea [formControlName]="specification.uid" class="form-control" id="spec-{{ specification.uid }}"
+                [ngClass]="{
+                  'is-invalid': hasAnyError(productForm, specification.uid)
+                }">
+              </textarea>
+              <div class="text-danger mb-1 ml-1" *ngIf="
+                  hasFieldError(productForm, specification.uid, 'minlength')
+                ">
+                {{ specification.name }} can't be under
+                {{ specification.minTextSize }} symbols
+              </div>
+              <div class="text-danger mb-1 ml-1" *ngIf="
+                  hasFieldError(productForm, specification.uid, 'maxlength')
+                ">
+                {{ specification.name }} can't be over
+                {{ specification.maxTextSize }} symbols
+              </div>
+              <div class="text-danger mb-1 ml-1" *ngIf="
+                  hasFieldError(productForm, specification.uid, 'required')
+                ">
+                {{ specification.name }} is required
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #checkbox>
+            <div class="form-group mb-3 mt-3">
+              <label class="checkbox-label" for="spec-{{ specification.uid }}"
+                class="form-label">{{ specification.name }}</label>
+
+              <div class="btn-group mb-1 d-block" role="group">
+                <input type="radio" [formControlName]="specification.uid" [value]="'Yes'" class="btn-check"
+                  id="btnradio{{ specification.uid }}-1" autocomplete="off" />
+                <label class="btn btn-outline-primary" for="btnradio{{ specification.uid }}-1">Yes</label>
+
+                <input type="radio" [formControlName]="specification.uid" [value]="'No'" class="btn-check"
+                  id="btnradio{{ specification.uid }}-2" autocomplete="off" />
+                <label class="btn btn-outline-primary" for="btnradio{{ specification.uid }}-2">No</label>
+              </div>
+
+              <div class="text-danger mb-1 ml-1" *ngIf="
+                  hasFieldError(productForm, specification.uid, 'required')
+                ">
+                {{ specification.name }} is required
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <button class="btn w-10 btn-success mb-3 mt-2" type="submit">
+        Create
+      </button>
+    </form>
+  </div>
+</div>

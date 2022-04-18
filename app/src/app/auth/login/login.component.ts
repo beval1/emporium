@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
-import { hasFieldError, validateAllFormFields } from 'src/app/shared/utils/validate';
+import {
+  hasFieldError,
+  validateAllFormFields,
+} from 'src/app/shared/utils/validate';
 import { faKey, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
-import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
-import { NotificationsService } from 'src/app/notification/services/notifications.service';
-
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-login',
@@ -22,14 +23,17 @@ export class LoginComponent implements OnInit {
   closeResult = '';
   @ViewChild('content') private content: any;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private modalService: NgbModal,
-    private notificationService: NotificationsService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private modalService: NgbModal
+  ) {
     this.serviceError = '';
     this.loginForm = this.fb.group({
-        email: ['', [Validators.required]], //no need for email validation here...
-        password: ['', [Validators.required]]
-      });
-
+      email: ['', [Validators.required]], //no need for email validation here...
+      password: ['', [Validators.required]],
+    });
   }
 
   ngOnInit(): void {}
@@ -44,7 +48,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    console.log("submitted login")
+    console.log('submitted login');
 
     this.serviceError = '';
 
@@ -54,21 +58,28 @@ export class LoginComponent implements OnInit {
       .signIn(email, password)
       .then(() => {
         this.modalService.dismissAll();
-        this.notificationService.showSuccess('Logged in successfully!')
       })
       .catch((error) => {
-        console.log(error.message)
-        this.serviceError = error.message
-      })
-
+        console.log(error.message);
+        this.serviceError = error.message;
+      });
   }
 
   open(content: any) {
-    this.modalService.open(content, {ariaLabelledBy: 'log-in', windowClass: 'login-modal', centered: true}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.modalService
+      .open(content, {
+        ariaLabelledBy: 'log-in',
+        windowClass: 'login-modal',
+        centered: true,
+      })
+      .result.then(
+        (result) => {
+          this.closeResult = `Closed with: ${result}`;
+        },
+        (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        }
+      );
   }
 
   private getDismissReason(reason: any): string {
@@ -81,7 +92,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  onLinkClick(path: string){
+  onLinkClick(path: string) {
     this.modalService.dismissAll();
     this.router.navigateByUrl(path);
   }

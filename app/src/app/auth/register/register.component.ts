@@ -1,18 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { hasFieldError, validateAllFormFields, passwordMissmatch, isFieldTouched, hasAnyError } from 'src/app/shared/utils/validate';
+import {
+  hasFieldError,
+  validateAllFormFields,
+  passwordMissmatch,
+  isFieldTouched,
+  hasAnyError,
+} from 'src/app/shared/utils/validate';
 import { validateEmail } from 'src/app/shared/validators/emailValidator';
 import { validatePhone } from 'src/app/shared/validators/mobilephoneValidator';
 import { samePasswordValidator } from 'src/app/shared/validators/samePasswordValidator';
 import { AuthService } from '../services/auth.service';
-import { faUser, faPhone, faEnvelope, faKey} from '@fortawesome/free-solid-svg-icons';
+import {
+  faUser,
+  faPhone,
+  faEnvelope,
+  faKey,
+} from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
-import { NotificationsService } from 'src/app/notification/services/notifications.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['../auth-components.scss']
+  styleUrls: ['../auth-components.scss'],
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
@@ -27,8 +37,11 @@ export class RegisterComponent implements OnInit {
   faEnvelope = faEnvelope;
   faKey = faKey;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,
-    private notificationService: NotificationsService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+  ) {
     this.registerForm = this.fb.group(
       {
         personalName: ['', [Validators.required, Validators.minLength(3)]],
@@ -59,13 +72,9 @@ export class RegisterComponent implements OnInit {
 
     this.authService
       .signUpUser(email, password, mobilePhone, personalName)
-      .then(() => this.notificationService.showSuccess('Registered as USER successfully!'))
       .catch((error) => {
         this.serviceError = error.message;
-        console.log(error.message)
+        console.log(error.message);
       });
-
   }
-
-
 }
