@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CategoriesService } from 'src/app/admin/services/categories/categories.service';
-import { SubcategoriesService } from 'src/app/admin/services/subcategories/subcategories.service';
 import { ICategory } from 'src/app/shared/interfaces/ICategory';
 
 @Component({
@@ -14,7 +13,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   categoriesSubscription: Subscription = new Subscription;
   categories: ICategory[] | undefined;
 
-  constructor(private categoriesService: CategoriesService, private subcategoriesCategores: SubcategoriesService,
+  constructor(private categoriesService: CategoriesService,
     private router: Router) {
     this.categoriesSubscription = this.categoriesService
       .getAllCategories()

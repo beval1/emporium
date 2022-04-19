@@ -43,7 +43,6 @@ export class ManageSpecificationsComponent implements OnInit {
     private specificationsService: SpecificationsService,
     private categoriesService: CategoriesService,
     private subcategoriesService: SubcategoriesService,
-    private notificationsService: NotificationsService
   ) {
     this.specificationForm = this.fb.group({
       specificationName: ['', [Validators.required]],
@@ -99,15 +98,7 @@ export class ManageSpecificationsComponent implements OnInit {
         specificationManTextSize,
         specificationMinNumber,
         specificationMaxNumber,
-      )
-      .then(() =>
-        this.notificationsService.showSuccess(
-          'Specification created successfully!'
-        )
-      )
-      .catch((error) => {
-        this.notificationsService.showError(`Error: ${error.message}`);
-      });
+      );
 
     resetForm(this.specificationForm);
   }
@@ -148,15 +139,8 @@ export class ManageSpecificationsComponent implements OnInit {
         .deleteSpecificationById(
           this.selectedCategory,
           this.selectedSubcategory,
-          specificationId
-        )
-        .then(() =>
-          this.notificationsService.showSuccess(
-            `Deleted "${specificationName}" successfully!`
-          )
-        )
-        .catch((error) =>
-          this.notificationsService.showError(`Error: ${error.message}`)
+          specificationId,
+          specificationName
         );
     }
   }

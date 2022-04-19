@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { first, firstValueFrom, Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { IProduct } from 'src/app/shared/interfaces/IProduct';
-import { ProductService } from '../services/product.service';
+import { ProductService } from '../../shared/services/product/product.service';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { IUser } from 'src/app/shared/interfaces/IUser';

@@ -26,7 +26,11 @@ import { NotificationModule } from './notification/notification.module';
 import { CategoriesComponent } from './pages/categories/categories.component';
 import { SubcategoriesComponent } from './pages/subcategories/subcategories.component';
 import { SellerModule } from './seller/seller.module';
-// import { NotificationContainerComponent } from './notification/notification-container/notification-container.component';
+
+import { LoaderService } from './shared/services/loader/loader.service';
+import { LoaderInterceptor } from './shared/interceptors/loader/loader.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -37,7 +41,7 @@ import { SellerModule } from './seller/seller.module';
     ProductDetailsComponent,
     WishlistComponent,
     CategoriesComponent,
-    SubcategoriesComponent
+    SubcategoriesComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,7 +60,7 @@ import { SellerModule } from './seller/seller.module';
     ReactiveFormsModule,
     NotificationModule
   ],
-  providers: [],
+  providers: [LoaderService, { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

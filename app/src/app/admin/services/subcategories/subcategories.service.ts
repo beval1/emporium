@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore,
+import {
+  AngularFirestore,
   AngularFirestoreCollection,
-  AngularFirestoreDocument 
+  AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable, firstValueFrom, first } from 'rxjs';
 import { ISubcategory } from 'src/app/shared/interfaces/ISubcategory';
 import { ICategory } from 'src/app/shared/interfaces/ICategory';
 import { CategoriesService } from '../categories/categories.service';
+import { NotificationsService } from 'src/app/notification/services/notifications.service';
+import { LoaderService } from 'src/app/shared/services/loader/loader.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +20,8 @@ export class SubcategoriesService {
     private fireStore: AngularFirestore,
     private fireStorage: AngularFireStorage,
     private categoriesService: CategoriesService,
+    private notificationsService: NotificationsService,
+    private loaderService: LoaderService
   ) {}
 
   getSubcategoryById(
@@ -42,6 +47,7 @@ export class SubcategoriesService {
     categoryId: string,
     picture?: File | null
   ) {
+    this.loaderService.show();
     const subcategoryId = this.fireStore.createId();
 
     let pictureUrl: string = '';
@@ -61,11 +67,6 @@ export class SubcategoriesService {
       specifications: [],
     };
 
-    await this.fireStore
-      .collection<ISubcategory>(`categories/${categoryId}/subcategories`)
-      .doc(subcategoryId)
-      .set(subcategory);
-
     this.categoriesService
       .getCategoryById(categoryId)
       .pipe(first())
@@ -82,12 +83,40 @@ export class SubcategoriesService {
           merge: true,
         });
       });
-  }
 
-  async deleteSubCategoryById(categoryId: string, subcategoryId: string) {
     await this.fireStore
       .collection<ISubcategory>(`categories/${categoryId}/subcategories`)
       .doc(subcategoryId)
-      .delete();
+      .set(subcategory)
+      .then(() =>
+        this.notificationsService.showSuccess(
+          'Subcategory created successfully!'
+        )
+      )
+      .catch((error) => {
+        this.notificationsService.showError(`Error: ${error.message}`);
+      }).finally(() => this.loaderService.hide());
+
+  }
+
+  async deleteSubCategoryById(
+    categoryId: string,
+    subcategoryId: string,
+    subcategoryName: string
+  ) {
+    this.loaderService.show();
+    await this.fireStore
+      .collection<ISubcategory>(`categories/${categoryId}/subcategories`)
+      .doc(subcategoryId)
+      .delete()
+      .then(() =>
+        this.notificationsService.showSuccess(
+          `Deleted "${subcategoryName}" successfully!`
+        )
+      )
+      .catch((error) =>
+        this.notificationsService.showError(`Error: ${error.message}`)
+      )
+      .finally(() => this.loaderService.hide());
   }
 }

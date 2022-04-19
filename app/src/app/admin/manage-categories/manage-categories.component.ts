@@ -27,7 +27,6 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private categoriesService: CategoriesService,
-    private notificationsService: NotificationsService
   ) {
     this.categoryForm = this.fb.group({
       categoryName: ['', [Validators.required]],
@@ -54,19 +53,15 @@ export class ManageCategoriesComponent implements OnInit, OnDestroy {
 
     const categoryName = this.categoryForm.get('categoryName')?.value;
 
-    this.categoriesService.createCategory(categoryName, this.fileToUpload).then(
-      () => this.notificationsService.showSuccess('Category created successfully!')).catch((error) => {
-      this.notificationsService.showError(`Error: ${error.message}`);
-    })
+    this.categoriesService.createCategory(categoryName, this.fileToUpload);
+
     resetForm(this.categoryForm);
     this.fileToUpload = null;
   }
 
   onDelete(categoryId: string, categoryName: string){
     if (confirm(`Are you sure, you want to delete ${categoryName}?`)){
-      this.categoriesService.deleteCategoryById(categoryId)
-      .then(() => this.notificationsService.showSuccess(`Deleted "${categoryName}" successfully!`))
-      .catch(error => this.notificationsService.showError(`Error: ${error.message}`));
+      this.categoriesService.deleteCategoryById(categoryId, categoryName)
     }
   }
 

@@ -28,13 +28,12 @@ export class ManageSubcategoriesComponent implements OnInit {
   fileToUpload: File | null | undefined = null;
   hasFieldError = hasFieldError;
   hasAnyError = hasAnyError;
-  
+
 
   constructor(
     private fb: FormBuilder,
     private categoriesService: CategoriesService,
     private subcategoriesService: SubcategoriesService,
-    private notificationsService: NotificationsService
   ) {
     this.subcategoryForm = this.fb.group({
       subcategoryName: ['', [Validators.required]],
@@ -66,15 +65,7 @@ export class ManageSubcategoriesComponent implements OnInit {
     const parentCategory = this.selectedCategory;
 
     this.subcategoriesService
-      .createSubcategory(subcategoryName, parentCategory, this.fileToUpload)
-      .then(() =>
-        this.notificationsService.showSuccess(
-          'Subcategory created successfully!'
-        )
-      )
-      .catch((error) => {
-        this.notificationsService.showError(`Error: ${error.message}`);
-      });
+      .createSubcategory(subcategoryName, parentCategory, this.fileToUpload);
 
     resetForm(this.subcategoryForm);
     this.fileToUpload = null;
@@ -103,9 +94,7 @@ export class ManageSubcategoriesComponent implements OnInit {
 
   onDelete(subcategoryId: string, subcategoryName: string){
     if (confirm(`Are you sure, you want to delete ${subcategoryName}?`)){
-      this.subcategoriesService.deleteSubCategoryById(this.selectedCategory, subcategoryId)
-      .then(() => this.notificationsService.showSuccess(`Deleted "${subcategoryName}" successfully!`))
-      .catch(error => this.notificationsService.showError(`Error: ${error.message}`));
+      this.subcategoriesService.deleteSubCategoryById(this.selectedCategory, subcategoryId, subcategoryName)
     }
   }
 

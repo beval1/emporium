@@ -6,6 +6,8 @@ import {
 } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable, firstValueFrom } from 'rxjs';
+import { LoaderService } from 'src/app/shared/services/loader/loader.service';
+import { NotificationsService } from 'src/app/notification/services/notifications.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,9 @@ export class CategoriesService {
 
   constructor(
     private fireStore: AngularFirestore,
-    private fireStorage: AngularFireStorage
+    private fireStorage: AngularFireStorage,
+    private loaderService: LoaderService,
+    private notificationsService: NotificationsService
   ) {
     this.categories = fireStore.collection<ICategory>('categories');
   }
@@ -29,6 +33,8 @@ export class CategoriesService {
   }
 
   async createCategory(categoryName: string, picture?: File | null) {
+    this.loaderService.show();
+
     const categoryId = this.fireStore.createId();
 
     let pictureUrl: string = '';
@@ -36,8 +42,9 @@ export class CategoriesService {
       const filePath = `categories/${categoryId}`;
       const fileRef = this.fireStorage.ref(filePath);
       //upload the picture
-      const upload = await this.fireStorage.upload(filePath, picture)
-      pictureUrl = await firstValueFrom(fileRef.getDownloadURL());
+      this.fireStorage.upload(filePath, picture).then(async () => {
+        pictureUrl = await firstValueFrom(fileRef.getDownloadURL());
+      });
     }
 
     const category: ICategory = {
@@ -47,10 +54,31 @@ export class CategoriesService {
       picture: pictureUrl || null,
     };
 
-    await this.categories.doc(categoryId).set(category);
+    await this.categories
+      .doc(categoryId)
+      .set(category)
+      .then(() =>
+        this.notificationsService.showSuccess('Category created successfully!')
+      )
+      .catch((error) => {
+        this.notificationsService.showError(`Error: ${error.message}`);
+      })
+      .finally(() => this.loaderService.hide());
   }
 
-  async deleteCategoryById(categoryId: string) {
-    await this.categories.doc(categoryId).delete();
+  async deleteCategoryById(categoryId: string, categoryName: string) {
+    this.loaderService.show();
+    await this.categories
+      .doc(categoryId)
+      .delete()
+      .then(() =>
+        this.notificationsService.showSuccess(
+          `Deleted "${categoryName}" successfully!`
+        )
+      )
+      .catch((error) =>
+        this.notificationsService.showError(`Error: ${error.message}`)
+      )
+      .finally(() => this.loaderService.hide());
   }
 }

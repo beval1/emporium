@@ -12,7 +12,7 @@ function passwordMissmatch(formGroup: FormGroup, error: string) {
   return formGroup.errors?.notSame && (formGroup.touched || formGroup.dirty)
 }
 
-function validateAllFormFields(formGroup: FormGroup) 
+function validateAllFormFields(formGroup: FormGroup)
 {
   formGroup.markAllAsTouched();
 }
