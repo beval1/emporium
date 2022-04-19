@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { CategoriesService } from 'src/app/admin/services/categories/categories.service';
 import { SubcategoriesService } from 'src/app/admin/services/subcategories/subcategories.service';
 import { ICategory } from 'src/app/shared/interfaces/ICategory';
@@ -22,23 +22,27 @@ import { ProductService } from '../services/product.service';
 import { IProductSpecification } from 'src/app/shared/interfaces/IProductSpecification';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { NotificationsService } from 'src/app/notification/services/notifications.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IProduct } from 'src/app/shared/interfaces/IProduct';
 
 @Component({
-  selector: 'app-add-product',
-  templateUrl: './add-product.component.html',
-  styleUrls: ['./add-product.component.scss'],
+  selector: 'app-create-edit-product',
+  templateUrl: './create-edit-product.component.html',
+  styleUrls: ['./create-edit-product.component.scss'],
 })
-export class AddProductComponent implements OnInit, OnDestroy {
+export class CreateEditProductComponent implements OnInit, OnDestroy {
   productForm: FormGroup;
   subscriptions: Subscription[] = [];
   categories: ICategory[] | undefined;
   subcategories: ISubcategory[] | undefined;
-  specifications: ISpecification[] | undefined;
+  specifications: ISpecification[] = [];
   selectedCategory: string = '';
   selectedSubcategory: string = '';
   filesToUpload: FileList | null = null;
   hasFieldError = hasFieldError;
   hasAnyError = hasAnyError;
+  editForm: boolean = false;
+  editableProduct: IProduct | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -46,7 +50,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
     private categoriesService: CategoriesService,
     private specificationsService: SpecificationsService,
     private productsService: ProductService,
-    private notificationsService: NotificationsService // private authService: AuthService,
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.productForm = this.fb.group({
       productName: ['', [Validators.required]],
@@ -61,6 +67,26 @@ export class AddProductComponent implements OnInit, OnDestroy {
           this.categories = categories;
         })
     );
+
+    if (this.route.snapshot.params.productId) {
+      this.route.paramMap.subscribe((params) => {
+        const productId = params.get('productId');
+
+        if (productId) {
+          this.subscriptions.push(
+            productsService
+              .getProductById(productId)
+              .subscribe((product: IProduct | undefined) => {
+                if (product) {
+                  this.editForm = true;
+                  this.editableProduct = product;
+                  this.fillForm();
+                }
+              })
+          );
+        }
+      });
+    }
   }
 
   ngOnInit(): void {}
@@ -68,11 +94,52 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
+  fillForm() {
+    if (this.editableProduct) {
+      this.selectedCategory = this.editableProduct.categoryId;
+      this.loadSubcategories();
+      this.selectedSubcategory = this.editableProduct.subcategoryId;
+      this.loadSpecifications();
+
+      this.productForm.patchValue({
+        productName: this.editableProduct.name,
+        productDescription: this.editableProduct.desc,
+        productPrice: this.editableProduct.price,
+      });
+
+    }
+  }
+
+  onCancelEdit() {
+    this.router.navigateByUrl(`/seller/all-products`);
+  }
+
   onSubcategoryChange() {
     resetForm(this.productForm);
     this.removeAllFormControls();
-    this.specifications = [];
 
+    this.loadSpecifications();
+  }
+
+  onCategoryChange() {
+    resetForm(this.productForm);
+    this.subcategories = [];
+    this.selectedSubcategory = '';
+
+    this.loadSubcategories();
+  }
+
+  private loadSubcategories() {
+    this.subscriptions.push(
+      this.subcategoriesService
+        .getAllSubcategoriesForCategory(this.selectedCategory)
+        .subscribe((subcategories: ISubcategory[]) => {
+          this.subcategories = subcategories;
+        })
+    );
+  }
+
+  private loadSpecifications() {
     this.subscriptions.push(
       this.specificationsService
         .getAllSpecificationsForSubcategory(
@@ -82,21 +149,16 @@ export class AddProductComponent implements OnInit, OnDestroy {
         .subscribe((specifications: ISpecification[]) => {
           this.specifications = specifications;
           this.specifications.forEach((s) => this.addFormControl(s));
-        })
-    );
-  }
-
-  onCategoryChange() {
-    resetForm(this.productForm);
-    this.subcategories = [];
-    this.selectedSubcategory = '';
-    this.specifications = [];
-
-    this.subscriptions.push(
-      this.subcategoriesService
-        .getAllSubcategoriesForCategory(this.selectedCategory)
-        .subscribe((subcategories: ISubcategory[]) => {
-          this.subcategories = subcategories;
+          if (this.specifications && this.editableProduct && this.editForm) {
+            for (let i = 0; i < this.specifications?.length; i++) {
+              if (this.editableProduct.specifications) {
+                this.productForm.patchValue({
+                  [this.specifications[i].uid]:
+                    this.editableProduct.specifications[i].value,
+                });
+              }
+            }
+          }
         })
     );
   }
@@ -117,7 +179,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
     let productSpecifications: IProductSpecification[] = [];
     if (this.specifications != undefined && this.specifications.length > 0) {
       for (let i = 0; i < this.specifications.length; i++) {
-        let value = specificationValues[this.specifications[i].uid]
+        let value = specificationValues[this.specifications[i].uid];
         let productSpecification: IProductSpecification = {
           specificationName: this.specifications[i].name,
           specificationType: this.specifications[i].type,
@@ -127,17 +189,15 @@ export class AddProductComponent implements OnInit, OnDestroy {
       }
     }
 
-    let user = localStorage.getItem('user');
-    let sellerId: string = '';
-    if (user) {
-      sellerId = JSON.parse(user).uid;
-    } else {
-      this.notificationsService.showError('Not logged in!');
+    let user = this.authService.getCurrentUserObject();
+    if (!user) {
       return;
     }
+    let sellerId: string = user.uid;
 
-    this.productsService
-      .addProduct(
+    if (this.editForm && this.editableProduct) {
+      this.productsService.updateProduct(
+        this.editableProduct.uid,
         this.selectedCategory,
         this.selectedSubcategory,
         productName,
@@ -146,11 +206,20 @@ export class AddProductComponent implements OnInit, OnDestroy {
         productSpecifications,
         this.filesToUpload,
         sellerId
-      )
-      .then(() =>
-        this.notificationsService.showSuccess('Product added successfully!')
-      )
-      .catch((error) => this.notificationsService.showError(error));
+      );
+      this.router.navigateByUrl('/seller/all-products');
+    } else {
+      this.productsService.addProduct(
+        this.selectedCategory,
+        this.selectedSubcategory,
+        productName,
+        productDescription,
+        productPrice,
+        productSpecifications,
+        this.filesToUpload,
+        sellerId
+      );
+    }
 
     this.productForm.reset();
     this.selectedCategory = '';
@@ -194,7 +263,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
         ]);
       }
     }
-    console.log(specification);
 
     this.productForm.addControl(specification.uid, control);
   }

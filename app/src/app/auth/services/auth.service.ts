@@ -154,7 +154,17 @@ export class AuthService {
     this.router.navigateByUrl('/');
   }
 
-  get getCurrentUser() {
+  get getCurrentUserObservable() {
     return this.user;
+  }
+
+  getCurrentUserObject(): IUser | null {
+    let user = localStorage.getItem('user');
+    if (user) {
+      return JSON.parse(user);
+    } else {
+      this.notificationsService.showError('Not logged in!');
+      return null;
+    }
   }
 }

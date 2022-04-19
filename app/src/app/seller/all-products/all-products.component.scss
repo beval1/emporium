@@ -1,0 +1,13 @@
+.search-products-input {
+  margin: 0 auto;
+  border: 1px solid black;
+}
+.faTrash {
+  color: red;
+}
+.faEdit {
+  color: orange
+}
+.faTrash, .faEdit {
+  cursor: pointer;
+}

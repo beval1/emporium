@@ -10,7 +10,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { RegistrationCompletedComponent } from './pages/registration-completed/registration-completed.component';
-import { AddProductComponent } from './seller/add-product/add-product.component';
+import { CreateEditProductComponent } from './seller/create-edit-product/create-edit-product.component';
 import { AllProductsComponent } from './seller/all-products/all-products.component';
 import { SellerDashboardComponent } from './seller/seller-dashboard/seller-dashboard.component';
 import { AdminGuard } from './shared/guards/admin.guard';
@@ -32,6 +32,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [GuestGuard]},
   { path: 'register', component: RegisterComponent, canActivate: [GuestGuard]},
   { path: 'register-seller', component: RegisterSellerComponent, canActivate: [GuestGuard]},
+  { path: 'registration-completed', component: RegistrationCompletedComponent},
   //User
   { path: 'user/profile', component: ProfileComponent, canActivate: [LoggedGuard, UserGuard]},
   { path: 'user/favourites', component: WishlistComponent}, //no guard for the whishlist
@@ -44,11 +45,11 @@ const routes: Routes = [
   { path: 'admin/manage-sellers', component: ManageSellersComponent, canActivate: [LoggedGuard, AdminGuard]},
   //Seller
   { path: 'seller/dashboard', component: SellerDashboardComponent, canActivate: [LoggedGuard, SellerGuard]},
-  { path: 'seller/add-product', component: AddProductComponent, canActivate: [LoggedGuard, SellerGuard]},
+  { path: 'seller/add-product', component: CreateEditProductComponent, canActivate: [LoggedGuard, SellerGuard]},
+  { path: 'seller/edit-product/:productId', component: CreateEditProductComponent, canActivate: [LoggedGuard, SellerGuard]},
   { path: 'seller/all-products', component: AllProductsComponent, canActivate: [LoggedGuard, SellerGuard]},
-  { path: 'registration-completed', component: RegistrationCompletedComponent},
   { path: '404', component: NotFoundComponent, pathMatch: 'full' },
-  // { path: '**', redirectTo: '404' },
+  { path: '**', redirectTo: '404' },
 
 ];
 
