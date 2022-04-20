@@ -30,6 +30,7 @@ import { SellerModule } from './seller/seller.module';
 import { LoaderService } from './shared/services/loader/loader.service';
 import { LoaderInterceptor } from './shared/interceptors/loader/loader.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { SubcategoryProductsComponent } from './pages/subcategory-products/subcategory-products.component';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
     WishlistComponent,
     CategoriesComponent,
     SubcategoriesComponent,
+    SubcategoryProductsComponent,
   ],
   imports: [
     BrowserModule,

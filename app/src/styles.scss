@@ -27,7 +27,7 @@ footer, nav{
 }
 
 .category-image, .subcategory-image  {
-  // object-fit: cover;
+  object-fit: contain;
   height: 250px;
   width: 250px;
   max-width: 30vw;

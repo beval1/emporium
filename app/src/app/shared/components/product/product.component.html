@@ -1,3 +1,45 @@
-<p>
-  product works!
-</p>
+<div class="wrapper d-flex flex-row justify-content-start flex-wrap">
+  <div class="product-card shadow bg-white d-flex flex-column rounded-container"
+    *ngIf="product && product.status != 'hidden' && product.status != 'awaiting approval'">
+    <div class="product-card-header p-1">
+      <div class="buttons-wrapper ">
+        <fa-icon class="fa-heart-regular fa-2x" [icon]="faHeart"></fa-icon>
+      </div>
+    </div>
+    <div class="product-card-body">
+      <img [routerLink]="['/product', product?.uid]" class="product-image mx-auto d-block" [src]="
+        product !== null && product.images != undefined && product.images.length > 0
+          ? product.images[0]
+          : '../../../../assets/no-thumbnail.jpg'
+      " alt="Product Picture" />
+    </div>
+    <div class="product-card-footer">
+      <div class="product-info mx-auto">
+        <a class="product-link" [routerLink]="['/product', product?.uid]">{{product?.name}}</a>
+        <div class="product-rating" *ngIf="currentRating != -1">
+          <ngb-rating class="star" [(rate)]="currentRating" [readonly]="true" [max]="5"></ngb-rating>
+          <span>({{averageRating}})</span>
+        </div>
+        <p class="product-quantity">
+          {{quantityString}}</p>
+        <div *ngIf="productPrice">
+          <p class="product-price">{{productPrice[0]}}<sup>{{productPrice[1] || '00'}}</sup> BGN</p>
+      </div>
+      <div *ngIf="productPrice != undefined && productPrice[0]=='0'">
+        <p class="product-price">Free</p>
+      </div>
+      <button class="btn btn-success add-to-cart-btn w-100">
+        <div class="d-inline">
+          <fa-icon [icon]="faCartPlus" class=""></fa-icon>
+        </div>
+        <span>
+          Add to Cart
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+</div>
+<!-- <ng-template #starTempalte>
+  <span class="star"></span>
+</ng-template> -->

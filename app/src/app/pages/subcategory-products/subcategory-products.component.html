@@ -1,3 +1,10 @@
-<p>
-  subcategory-products works!
-</p>
+<div class="container d-flex">
+  <app-product-filter></app-product-filter>
+  <div class="">
+    <div class="products-wrapper d-flex flex-row flex-wrap">
+      <div *ngFor="let product of products">
+        <app-product [product]="product"></app-product>
+      </div>
+    </div>
+  </div>
+</div>

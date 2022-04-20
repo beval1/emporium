@@ -10,9 +10,9 @@ else showSubcategories"></div>
   <div class="wrapper d-flex flex-row justify-content-start flex-wrap">
 
     <div *ngFor="let subcategory of this.subcategories">
-      <a class="subcategory-link" [routerLink]="[subcategory.uid]">
-        <div class="subcategory-card rounded-container shadow bg-white d-flex flex-column m-3">
-          <div class="subcategory-card-header rounded-container"></div>
+      <a class="subcategory-link" [routerLink]="['/subcategories', subcategory.uid]">
+        <div class="subcategory-card shadow bg-white d-flex flex-column m-3">
+          <div class="subcategory-card-header "></div>
           <div class="subcategory-card-body">
             <img class="subcategory-image" [src]="
           subcategory.picture !== null

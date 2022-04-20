@@ -47,8 +47,21 @@
       </div>
 
       <div class="form-group mb-2">
+        <label for="product-quantity" class="form-label">Product Quantity</label>
+        <input formControlName="productQuantity" type="number" class="form-control" [ngClass]="{
+            'is-invalid': hasAnyError(productForm, 'productQuantity')
+          }" />
+        <div class="text-danger mb-1" *ngIf="hasFieldError(productForm, 'productQuantity', 'required')">
+          Product Quantity is required
+        </div>
+        <div class="text-danger mb-1" *ngIf="hasFieldError(productForm, 'productQuantity', 'min')">
+          Product Quantity can't be negative
+        </div>
+      </div>
+
+      <div class="form-group mb-2">
         <label for="product-price" class="form-label">Product Price (in BGN)</label>
-        <input formControlName="productPrice" type="number" class="form-control" [ngClass]="{
+        <input formControlName="productPrice" type="number" step="0.01" class="form-control" [ngClass]="{
             'is-invalid': hasAnyError(productForm, 'productPrice')
           }" />
         <div class="text-danger mb-1" *ngIf="hasFieldError(productForm, 'productPrice', 'required')">

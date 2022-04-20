@@ -26,10 +26,12 @@ export class ProductService {
     price: number,
     specifications: IProductSpecification[],
     filesToUpload: FileList | null,
-    sellerId: string
+    sellerId: string,
+    quantity: number,
+    status: string,
   ) {
     this.loaderService.show();
-    
+
     const id = this.fireStore.createId();
 
     let images: string[] = [];
@@ -57,6 +59,8 @@ export class ProductService {
       categoryId: categoryId,
       subcategoryId: subcategoryId,
       sellerId: sellerId,
+      quantity: quantity,
+      status: status,
     };
 
     console.log(product);
@@ -84,7 +88,8 @@ export class ProductService {
     price: number,
     specifications: IProductSpecification[],
     filesToUpload: FileList | null,
-    sellerId: string
+    sellerId: string,
+    quantity: number,
   ) {
 
     this.loaderService.show()
@@ -103,7 +108,16 @@ export class ProductService {
       }
     }
 
-    const product: IProduct = {
+    let product: IProduct | undefined;
+    firstValueFrom(this.getProductById(id)).then((product: IProduct | undefined) => {
+      product = product;
+    })
+    if (!product){
+      this.notificationsService.showError('No such product!')
+      return;
+    }
+
+    const newProduct: IProduct = {
       uid: id,
       name: name,
       desc: description,
@@ -113,16 +127,18 @@ export class ProductService {
       categoryId: categoryId,
       subcategoryId: subcategoryId,
       sellerId: sellerId,
+      quantity: quantity,
+      status: product.status,
     };
 
-    console.log(product);
+    console.log(newProduct);
 
     await this.fireStore
       .collection<IProduct>(
         `products`
       )
       .doc(id)
-      .set(product, {merge: true})
+      .set(newProduct, {merge: true})
       .then(() =>
         this.notificationsService.showSuccess('Product UPDATED successfully!')
       )

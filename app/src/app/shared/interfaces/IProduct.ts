@@ -17,5 +17,6 @@ export interface IProduct {
   subcategoryId: string,
   // subcategoryName: string,
   sellerId: string,
-  hidden?: boolean
+  status: string,
+  quantity: Number,
 }

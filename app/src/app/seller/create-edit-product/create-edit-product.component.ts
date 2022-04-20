@@ -58,6 +58,7 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
       productName: ['', [Validators.required]],
       productDescription: ['', [Validators.maxLength(4096)]],
       productPrice: ['', [Validators.required, Validators.min(0)]],
+      productQuantity: ['', [Validators.required, Validators.min(1)]],
     });
 
     this.subscriptions.push(
@@ -173,6 +174,7 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
       productName,
       productDescription,
       productPrice,
+      productQuantity,
       ...specificationValues
     } = this.productForm.value;
 
@@ -205,7 +207,8 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
         productPrice,
         productSpecifications,
         this.filesToUpload,
-        sellerId
+        sellerId,
+        productQuantity,
       );
       this.router.navigateByUrl('/seller/all-products');
     } else {
@@ -217,7 +220,9 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
         productPrice,
         productSpecifications,
         this.filesToUpload,
-        sellerId
+        sellerId,
+        productQuantity,
+        'hidden'
       );
     }
 

@@ -23,11 +23,13 @@ import { WishlistComponent } from './wishlist/wishlist.component';
 import { CategoriesComponent } from './pages/categories/categories.component';
 import { SubcategoriesComponent } from './pages/subcategories/subcategories.component';
 import { RegisterSellerComponent } from './auth/register-seller/register-seller.component';
+import { SubcategoryProductsComponent } from './pages/subcategory-products/subcategory-products.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'categories', component: CategoriesComponent },
   { path: 'categories/:categoryId', component: SubcategoriesComponent, },
+  { path: 'subcategories/:subcategoryId', component: SubcategoryProductsComponent, },
   //Auth
   { path: 'login', component: LoginComponent, canActivate: [GuestGuard]},
   { path: 'register', component: RegisterComponent, canActivate: [GuestGuard]},
