@@ -106,6 +106,7 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
         productName: this.editableProduct.name,
         productDescription: this.editableProduct.desc,
         productPrice: this.editableProduct.price,
+        productQuantity: this.editableProduct.quantity,
       });
 
     }
@@ -195,8 +196,9 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
     if (!user) {
       return;
     }
-    let sellerId: string = user.uid;
+    // let sellerId: string = user.uid;
 
+    let functionResult = false;
     if (this.editForm && this.editableProduct) {
       this.productsService.updateProduct(
         this.editableProduct.uid,
@@ -207,9 +209,9 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
         productPrice,
         productSpecifications,
         this.filesToUpload,
-        sellerId,
+        user,
         productQuantity,
-      );
+      ).then(result => functionResult=result);
       this.router.navigateByUrl('/seller/all-products');
     } else {
       this.productsService.addProduct(
@@ -220,15 +222,19 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
         productPrice,
         productSpecifications,
         this.filesToUpload,
-        sellerId,
+        user,
         productQuantity,
-        'hidden'
-      );
+        'awaiting approval'
+      ).then(result => functionResult=result);
     }
 
-    this.productForm.reset();
-    this.selectedCategory = '';
-    this.selectedSubcategory = '';
+    console.log(functionResult)
+    if(functionResult){
+      this.productForm.reset();
+      this.selectedCategory = '';
+      this.selectedSubcategory = '';
+    }
+
   }
 
   onUpload(e: EventTarget | null) {

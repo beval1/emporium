@@ -24,6 +24,10 @@ import { CategoriesComponent } from './pages/categories/categories.component';
 import { SubcategoriesComponent } from './pages/subcategories/subcategories.component';
 import { RegisterSellerComponent } from './auth/register-seller/register-seller.component';
 import { SubcategoryProductsComponent } from './pages/subcategory-products/subcategory-products.component';
+import { ManageProductsComponent } from './admin/manage-products/manage-products.component';
+import { PendingOrdersComponent } from './seller/pending-orders/pending-orders.component';
+import { ArchivedOrdersComponent } from './seller/archived-orders/archived-orders.component';
+import { ManagePromoCodesComponent } from './seller/manage-promo-codes/manage-promo-codes.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -45,11 +49,15 @@ const routes: Routes = [
   { path: 'admin/manage-subcategories', component: ManageSubcategoriesComponent, canActivate: [LoggedGuard, AdminGuard]},
   { path: 'admin/manage-specifications', component: ManageSpecificationsComponent, canActivate: [LoggedGuard, AdminGuard]},
   { path: 'admin/manage-sellers', component: ManageSellersComponent, canActivate: [LoggedGuard, AdminGuard]},
+  { path: 'admin/manage-products', component: ManageProductsComponent, canActivate: [LoggedGuard, AdminGuard]},
   //Seller
   { path: 'seller/dashboard', component: SellerDashboardComponent, canActivate: [LoggedGuard, SellerGuard]},
   { path: 'seller/add-product', component: CreateEditProductComponent, canActivate: [LoggedGuard, SellerGuard]},
   { path: 'seller/edit-product/:productId', component: CreateEditProductComponent, canActivate: [LoggedGuard, SellerGuard]},
   { path: 'seller/all-products', component: AllProductsComponent, canActivate: [LoggedGuard, SellerGuard]},
+  { path: 'seller/pending-orders', component: PendingOrdersComponent, canActivate: [LoggedGuard, SellerGuard]},
+  { path: 'seller/archived-orders', component: ArchivedOrdersComponent, canActivate: [LoggedGuard, SellerGuard]},
+  { path: 'seller/manage-promo-codes', component: ManagePromoCodesComponent, canActivate: [LoggedGuard, SellerGuard]},
   { path: '404', component: NotFoundComponent, pathMatch: 'full' },
   { path: '**', redirectTo: '404' },
 

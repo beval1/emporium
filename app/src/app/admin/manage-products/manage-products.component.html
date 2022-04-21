@@ -1,10 +1,18 @@
-<app-notification></app-notification>
 <div class="container d-flex">
-  <app-seller-aside></app-seller-aside>
+  <app-admin-aside></app-admin-aside>
   <div class="container shadow bg-white align-items-center rounded-container">
-    <h3 class="mt-3 text-center">Search For Product</h3>
-    <input class="form-control search-products-input d-flex mt-2 mb-5 w-75" type="search" placeholder="Search..."
-      aria-label="Search" [(ngModel)]="searchValue" (ngModelChange)="onChange()">
+    <h3 class="mt-2">Manage Products</h3>
+    <div class="from-group mb-2 mt-3">
+      <label for="sellers" class="form-label">Seller</label>
+      <select class="form-select" aria-label="Subcategory Select" id="category" [(ngModel)]="selectedSeller"
+        (ngModelChange)="onSellerChange()">
+        <option value="" selected>Select Seller</option>
+        <option *ngFor="let seller of sellers" [ngValue]="seller.uid">
+          {{ seller.displayName }}
+        </option>
+      </select>
+    </div>
+
     <div *ngIf="
         this.sellerProducts === undefined || this.sellerProducts.length == 0;
         then noProducts;
@@ -12,7 +20,7 @@
       "></div>
 
     <ng-template #noProducts>
-      <h5 class="text-center m-5">There are no products!</h5>
+      <h5 class="text-center m-5">There are no products for this seller!</h5>
     </ng-template>
 
     <ng-template #table>
@@ -22,8 +30,7 @@
             <th scope="col">#</th>
             <th scope="col">Product Name</th>
             <th scope="col">Status</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
+            <th scope="col">Action</th>
             <th></th>
           </tr>
         </thead>
@@ -31,20 +38,19 @@
           <tr *ngFor="let product of sellerProducts; let i = index">
             <td>{{ i + 1 }}</td>
             <td scope="row">{{ product.name }}</td>
-            <td scope="row">
-              <p *ngIf="product.status=='hidden'" class="text-danger">{{product.status}}</p>
+            <td>
+              <p *ngIf="product.status=='hidden'"  class="text-danger">{{product.status}}</p>
               <p *ngIf="product.status=='active'" class="text-success">{{product.status}}</p>
               <p *ngIf="product.status=='awaiting approval'" class="text-warning">{{product.status}}</p>
             </td>
             <td>
-              <fa-icon class="faEdit" [icon]="faPenToSquare" (click)="onEdit(product)"></fa-icon>
-            </td>
-            <td>
-              <fa-icon class="faTrash" [icon]="faTrash" (click)="onDelete(product)"></fa-icon>
+              <button *ngIf="product.status!='hidden' && product.status!='awaiting approval'" class="btn btn-danger" (click)="onHide(product)">Hide</button>
+              <button *ngIf="product.status=='hidden' || product.status=='awaiting approval'" class="btn btn-success" (click)="onApprove(product)">Approve</button>
             </td>
           </tr>
         </tbody>
       </table>
     </ng-template>
+
   </div>
 </div>

@@ -7,6 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SellerAsideComponent } from './seller-aside/seller-aside.component';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NotificationComponent } from './notification/notification.component';
+import { ArchivedOrdersComponent } from './archived-orders/archived-orders.component';
+import { PendingOrdersComponent } from './pending-orders/pending-orders.component';
+import { ManagePromoCodesComponent } from './manage-promo-codes/manage-promo-codes.component';
 
 
 
@@ -15,7 +19,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CreateEditProductComponent,
     AllProductsComponent,
     SellerDashboardComponent,
-    SellerAsideComponent
+    SellerAsideComponent,
+    NotificationComponent,
+    ArchivedOrdersComponent,
+    PendingOrdersComponent,
+    ManagePromoCodesComponent,
   ],
   imports: [
     CommonModule,

@@ -1,3 +1,4 @@
+<app-notification></app-notification>
 <div class="container d-flex">
   <app-seller-aside *ngIf="!editForm"></app-seller-aside>
   <div class="container shadow bg-white align-items-center rounded-container">
@@ -78,7 +79,7 @@
           class="form-control"
           id="product-images"
           type="file"
-          accept=".png,.jpg"
+          accept=".png,.jpg,.webp"
           multiple="multiple"
           (change)="onUpload($event.target)"
         />

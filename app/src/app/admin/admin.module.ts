@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { AdminAsideComponent } from './admin-aside/admin-aside.component';
 import { RouterModule } from '@angular/router';
+import { ManageProductsComponent } from './manage-products/manage-products.component';
 
 
 
@@ -23,7 +24,8 @@ import { RouterModule } from '@angular/router';
     ManageSpecificationsComponent,
     ManageSellersComponent,
     ManageUsersComponent,
-    AdminAsideComponent
+    ManageProductsComponent,
+    AdminAsideComponent,
   ],
   imports: [
     CommonModule,

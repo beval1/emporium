@@ -4,11 +4,13 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
   AngularFirestore,
   AngularFirestoreDocument,
+  Query,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { switchMap, tap, map } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
 import { NotificationsService } from 'src/app/notification/services/notifications.service';
+import { LoaderService } from 'src/app/shared/services/loader/loader.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,12 +22,16 @@ export class AuthService {
     private fireStore: AngularFirestore, // Inject Firestore service
     private fireAuth: AngularFireAuth, // Inject Firebase auth service
     private router: Router,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private loaderService: LoaderService,
   ) {
     this.user = this.fireAuth.authState.pipe(
-      switchMap((user) => {
+      switchMap( (user) => {
         if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
+          firstValueFrom(this.fireStore.collection<IUser>('users').doc(user.uid).valueChanges()).then((userObject: IUser | undefined) => {
+            // console.log(userObject)
+            localStorage.setItem('user', JSON.stringify(userObject));
+          })
           return this.fireStore.doc<IUser>(`users/${user.uid}`).valueChanges();
         } else {
           return of(null);
@@ -36,9 +42,10 @@ export class AuthService {
 
   // Sign in with email/password
   async signIn(email: string, password: string) {
+    this.loaderService.show();
     await this.fireAuth.signInWithEmailAndPassword(email, password).then(() => {
       this.notificationsService.showSuccess('Logged in successfully!');
-    });
+    }).finally(() => this.loaderService.hide()); //no notification on Error because the is ServiceError message in the component
     this.router.navigateByUrl('/');
   }
 
@@ -48,19 +55,22 @@ export class AuthService {
     password: string,
     displayName: string,
     userRole: string,
+    status: string,
     mobilePhone?: string
   ) {
+    this.loaderService.show();
     return await this.fireAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
-        this.setUserData(result.user, userRole, displayName, mobilePhone);
+        this.setUserData(result.user, userRole, displayName, status, mobilePhone);
         console.log(result.user);
         this.router.navigateByUrl('/registration-completed');
       })
       .then(() =>
-        this.notificationsService.showSuccess(`Registered as ${userRole.toUpperCase()} successfully!`)
-      )
-
+        this.notificationsService.showSuccess(
+          `Registered as ${userRole.toUpperCase()} successfully!`
+        )) //no notification on Error because the is ServiceError message in the component
+        .finally(() => this.loaderService.hide());
   }
 
   signUpUser(
@@ -69,7 +79,7 @@ export class AuthService {
     mobilePhone: string,
     displayName: string
   ) {
-    return this.signUp(email, password, displayName, 'user', mobilePhone);
+    return this.signUp(email, password, displayName, 'user', 'active', mobilePhone);
   }
 
   signUpSeller(
@@ -78,14 +88,15 @@ export class AuthService {
     companyName: string,
     mobilePhone?: string
   ) {
-    return this.signUp(email, password, companyName, 'seller', mobilePhone);
+    return this.signUp(email, password, companyName, 'seller', 'awaiting approval', mobilePhone);
   }
 
   setUserData(
     user: firebase.default.User | null,
     userRole: string,
     displayName: string,
-    mobilePhone?: string
+    status: string,
+    mobilePhone?: string,
   ) {
     if (!user) {
       return;
@@ -105,6 +116,7 @@ export class AuthService {
       photoURL: user.photoURL,
       phoneNumber: mobilePhone,
       userRole: userRole,
+      status: status,
     };
 
     return userRef.set(userData, {
@@ -146,11 +158,13 @@ export class AuthService {
 
   // Sign out
   async signOut() {
+    this.loaderService.show()
     console.log('logging out');
     await this.fireAuth
       .signOut()
       .then(() => this.notificationsService.showSuccess('Logged out!'))
-      .catch((error) => this.notificationsService.showError(error));
+      .catch((error) => this.notificationsService.showError(error))
+      .finally(() => this.loaderService.hide());
     this.router.navigateByUrl('/');
   }
 
@@ -166,5 +180,42 @@ export class AuthService {
       this.notificationsService.showError('Not logged in!');
       return null;
     }
+  }
+
+  getAllSellers(searchValue?: string): Observable<IUser[]> {
+    return this.fireStore
+      .collection<IUser>('users', (ref) => {
+        const query: Query = ref.where('userRole', '==', 'seller');
+        if (searchValue) {
+          return query
+            .orderBy('displayName')
+            .startAt(searchValue)
+            .endAt(searchValue + '\uf8ff');
+        }
+        return query;
+      })
+      .valueChanges();
+  }
+
+  getSellerById(sellerId: string): Observable<IUser | undefined> {
+    return this.fireStore
+      .collection<IUser>('users', (ref) => ref.where('userRole', '==', 'seller')).doc(sellerId)
+      .valueChanges();
+  }
+
+  async updateUserStatus(sellerId: string, status: string) {
+    this.loaderService.show();
+
+    await this.fireStore
+      .collection(
+        `users`
+      )
+      .doc(sellerId)
+      .set({status: status}, {merge: true})
+      .then(() =>
+        this.notificationsService.showSuccess(`Seller status changed to '${status}'`)
+      )
+      .catch((error) => this.notificationsService.showError(error))
+      .finally(() => this.loaderService.hide());
   }
 }

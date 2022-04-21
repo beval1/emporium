@@ -1,0 +1,8 @@
+<div *ngIf="seller?.status!='active'" class="alert alert-warning rounded-container alert-container">
+  <p *ngIf="seller?.status=='banned'" class="">Your seller account current status is "<span
+      class="text-danger">{{seller?.status}}</span>". You can't create new products and all your already
+    added products are not visible in the store. Please contact the administrator.</p>
+  <p *ngIf="seller?.status=='awaiting approval'" class="">Your seller account current status is "<span
+    class="text-danger">{{seller?.status}}</span>".
+    Please wait for approval. This may take a few days.</p>
+</div>

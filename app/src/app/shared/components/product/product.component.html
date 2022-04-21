@@ -1,6 +1,6 @@
 <div class="wrapper d-flex flex-row justify-content-start flex-wrap">
   <div class="product-card shadow bg-white d-flex flex-column rounded-container"
-    *ngIf="product && product.status != 'hidden' && product.status != 'awaiting approval'">
+    *ngIf="isActive()">
     <div class="product-card-header p-1">
       <div class="buttons-wrapper ">
         <fa-icon class="fa-heart-regular fa-2x" [icon]="faHeart"></fa-icon>
@@ -15,13 +15,14 @@
     </div>
     <div class="product-card-footer">
       <div class="product-info mx-auto">
-        <a class="product-link" [routerLink]="['/product', product?.uid]">{{product?.name}}</a>
+        <a class="product-link" [routerLink]="['/product', product?.uid]">{{productName}}</a>
         <div class="product-rating" *ngIf="currentRating != -1">
           <ngb-rating class="star" [(rate)]="currentRating" [readonly]="true" [max]="5"></ngb-rating>
-          <span>({{averageRating}})</span>
+          <span *ngIf="currentRating>0">({{product?.rating}})</span>
         </div>
-        <p class="product-quantity">
-          {{quantityString}}</p>
+        <p *ngIf="quantityString=='In Stock'" class="product-quantity text-success">{{quantityString}}</p>
+        <p *ngIf="quantityString=='Out of Stock'" class="product-quantity text-danger">{{quantityString}}</p>
+        <p *ngIf="quantityString!='Out of Stock' && quantityString!='In Stock'" class="product-quantity quantity-orange">{{quantityString}}</p>
         <div *ngIf="productPrice">
           <p class="product-price">{{productPrice[0]}}<sup>{{productPrice[1] || '00'}}</sup> BGN</p>
       </div>

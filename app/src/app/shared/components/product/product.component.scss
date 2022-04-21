@@ -23,7 +23,7 @@
 .product-info {
   position: relative;
   height: 100%;
-  width: 85%;
+  width: 90%;
   // border: 1px solid black
 }
 .product-link {
@@ -42,8 +42,11 @@
   position: absolute;
   bottom: 85px;
   left: 2px;
-  color: green;
+  // color: green;
   font-size: smaller;
+}
+.quantity-orange {
+  color:#e37b27;
 }
 .product-price {
   position: absolute;
@@ -59,12 +62,13 @@ sup {
 //   font-family: "Montserrat", sans-serif;
 // }
 .star {
-  color: #f9bf3b;
+  // color: #f9bf3b;
+  color: #f2db5a;
   font-size: larger;
 }
 .fa-heart-regular{
   position: relative;
-  bottom: 3px;
+  bottom: 2px;
   left: 5px;
 }
 .buttons-wrapper {

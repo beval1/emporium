@@ -6,6 +6,7 @@ import { IProductSpecification } from 'src/app/shared/interfaces/IProductSpecifi
 import { firstValueFrom, Observable } from 'rxjs';
 import { NotificationsService } from 'src/app/notification/services/notifications.service';
 import { LoaderService } from '../loader/loader.service';
+import { IUser } from '../../interfaces/IUser';
 
 @Injectable({
   providedIn: 'root',
@@ -26,10 +27,15 @@ export class ProductService {
     price: number,
     specifications: IProductSpecification[],
     filesToUpload: FileList | null,
-    sellerId: string,
+    seller: IUser,
     quantity: number,
     status: string,
-  ) {
+  ): Promise<boolean> {
+    if (seller.status!='active'){
+      this.notificationsService.showError("Your seller account is not active! You can't create new products.")
+      return false;
+    }
+
     this.loaderService.show();
 
     const id = this.fireStore.createId();
@@ -40,7 +46,7 @@ export class ProductService {
       for (let i = 0; i < filesToUpload.length; i++) {
         const filePath = `products/${id}/${i}`;
         //upload the image
-        await await this.fireStorage.upload(filePath, filesToUpload[i]);
+        await this.fireStorage.upload(filePath, filesToUpload[i]);
 
         const downloadUrl = await firstValueFrom(
           this.fireStorage.ref(filePath).getDownloadURL()
@@ -58,7 +64,7 @@ export class ProductService {
       specifications: specifications || null,
       categoryId: categoryId,
       subcategoryId: subcategoryId,
-      sellerId: sellerId,
+      sellerId: seller.uid,
       quantity: quantity,
       status: status,
     };
@@ -77,6 +83,8 @@ export class ProductService {
       )
       .catch((error) => this.notificationsService.showError(error))
       .finally(() => this.loaderService.hide());
+
+      return true;
   }
 
   async updateProduct(
@@ -88,9 +96,9 @@ export class ProductService {
     price: number,
     specifications: IProductSpecification[],
     filesToUpload: FileList | null,
-    sellerId: string,
+    seller: IUser,
     quantity: number,
-  ) {
+  ): Promise<boolean> {
 
     this.loaderService.show()
     let images: string[] = [];
@@ -99,7 +107,7 @@ export class ProductService {
       for (let i = 0; i < filesToUpload.length; i++) {
         const filePath = `products/${id}/${i}`;
         //upload the image
-        await await this.fireStorage.upload(filePath, filesToUpload[i]);
+        await this.fireStorage.upload(filePath, filesToUpload[i]);
 
         const downloadUrl = await firstValueFrom(
           this.fireStorage.ref(filePath).getDownloadURL()
@@ -108,13 +116,13 @@ export class ProductService {
       }
     }
 
-    let product: IProduct | undefined;
-    firstValueFrom(this.getProductById(id)).then((product: IProduct | undefined) => {
-      product = product;
+    let editableProduct: IProduct | undefined;
+    await firstValueFrom(this.getProductById(id)).then((product: IProduct | undefined) => {
+      editableProduct = product;
     })
-    if (!product){
+    if (!editableProduct){
       this.notificationsService.showError('No such product!')
-      return;
+      return false;
     }
 
     const newProduct: IProduct = {
@@ -126,9 +134,9 @@ export class ProductService {
       specifications: specifications || null,
       categoryId: categoryId,
       subcategoryId: subcategoryId,
-      sellerId: sellerId,
+      sellerId: seller.uid,
       quantity: quantity,
-      status: product.status,
+      status: editableProduct.status,
     };
 
     console.log(newProduct);
@@ -141,6 +149,24 @@ export class ProductService {
       .set(newProduct, {merge: true})
       .then(() =>
         this.notificationsService.showSuccess('Product UPDATED successfully!')
+      )
+      .catch((error) => this.notificationsService.showError(error))
+      .finally(() => this.loaderService.hide());
+
+      return true;
+  }
+
+  async updateProductStatus(productId: string, status: string) {
+    this.loaderService.show();
+
+    await this.fireStore
+      .collection(
+        `products`
+      )
+      .doc(productId)
+      .set({status: status}, {merge: true})
+      .then(() =>
+        this.notificationsService.showSuccess(`Product status changed to '${status}'`)
       )
       .catch((error) => this.notificationsService.showError(error))
       .finally(() => this.loaderService.hide());
