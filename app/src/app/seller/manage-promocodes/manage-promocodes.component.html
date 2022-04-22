@@ -1,0 +1,151 @@
+<app-notification></app-notification>
+<div class="d-flex">
+  <app-seller-aside></app-seller-aside>
+  <div class="container shadow bg-white align-items-center rounded-container">
+    <h3 class="mt-2">Create Promocode</h3>
+    <div class="from-group mb-2 mt-3">
+      <label for="type" class="form-label">Promotion Subjects</label>
+      <select class="form-select" aria-label="Type Select" id="type" [(ngModel)]="selectedType"
+        (ngModelChange)="onChangeType()">
+        <option value="" selected>Select Type</option>
+        <option *ngFor="let type of promocodeTypes | keyvalue" [ngValue]="type.key">
+          {{ type.key }}
+        </option>
+      </select>
+    </div>
+
+    <div class="from-group mb-2 mt-3" *ngIf="selectedType=='Categories'">
+      <label for="category" class="form-label">Select Categories</label>
+      <select class="form-select" aria-label="Subcategory Select" id="category" [(ngModel)]="selectedCategories"
+        (ngModelChange)="onCategoryChange()" multiple>
+        <!-- <option value="" selected>Select Categories</option> -->
+        <option *ngFor="let category of categories" [ngValue]="category.uid">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="from-group mb-2 mt-3" *ngIf="selectedType=='Subcategories'">
+      <label for="subcategory" class="form-label">Select Subcategories</label>
+      <select class="form-select" aria-label="Subcategory Select" id="subcategory" [(ngModel)]="selectedSubcategories"
+        (ngModelChange)="onSubcategoryChange()" multiple>
+        <!-- <option value="" selected>Select Subcategories</option> -->
+        <option *ngFor="let subcategory of subcategories" [ngValue]="subcategory.uid">
+          {{ subcategory.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="from-group mb-2 mt-3" *ngIf="selectedType=='Products'">
+      <label for="product" class="form-label">Select Products</label>
+      <select class="form-select" aria-label="Product Select" id="product" [(ngModel)]="selectedProducts" multiple>
+        <!-- <option value="" selected>Select Products</option> -->
+        <option *ngFor="let product of products" [ngValue]="product.uid">
+          {{ product.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group mb-2"
+      *ngIf="selectedSubcategories.length > 0 || selectedCategories.length > 0 || selectedProducts.length > 0">
+      <label for="discountType" class="form-label">Discount Type</label>
+      <select class="form-select" aria-label="Discount Type Select" id="discountType" [(ngModel)]="discountType"
+        id="discountType">
+        <option value="" selected>Select Discount Type</option>
+        <option value="percent" selected>Percent</option>
+        <option value="fixed" selected>Fixed Number</option>
+      </select>
+    </div>
+
+    <form [formGroup]="promocodeForm" (ngSubmit)="onSubmit()" *ngIf="discountType">
+      <div class="form-group mb-2">
+        <label for="code" class="form-label">Promocode Code</label>
+        <input formControlName="code" type="text" class="form-control" [ngClass]="{
+              'is-invalid': hasAnyError(promocodeForm, 'code')
+            }" id="code" />
+        <div class="text-danger mb-1" *ngIf="hasFieldError(promocodeForm, 'code', 'required')">
+          Promocode Code is required!
+        </div>
+        <div class="text-danger mb-1" *ngIf="hasFieldError(promocodeForm, 'code', 'minlength')">
+          Promocode Code Can't be less than 5 symbols
+        </div>
+      </div>
+
+      <div class="form-group mb-2">
+        <label for="discountValue" class="form-label">Discount Value</label>
+        <input formControlName="discountValue" type="text" class="form-control" [ngClass]="{
+              'is-invalid': hasAnyError(promocodeForm, 'discountValue') || discountValueError
+            }" id="discountValue" />
+        <div class="text-danger mb-1" *ngIf="hasFieldError(promocodeForm, 'discountValue', 'required')">
+          Discount Value is required!
+        </div>
+        <div class="text-danger mb-1" *ngIf="hasFieldError(promocodeForm, 'discountValue', 'min')">
+          Discount Value Can't be negative number!
+        </div>
+        <div class="text-danger mb-1" *ngIf="discountValueError">
+          Discount can't be over 100%
+        </div>
+      </div>
+
+      <button class="btn w-10 btn-success mb-3 mt-2" type="submit">
+        Create
+      </button>
+    </form>
+
+    <div *ngIf="this.promocodes === undefined || this.promocodes.length == 0;
+    then noPromos;
+    else table
+  "></div>
+
+    <ng-template #noPromos>
+      <h5 class="text-center m-5">There are no promocodes!</h5>
+    </ng-template>
+
+    <ng-template #table>
+      <h4 class="mt-3">All Promocodes</h4>
+      <table class="table table-hover">
+        <thead class="text-center">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Promo code</th>
+            <th scope="col">Type</th>
+            <th scope="col">Valid for</th>
+            <th scope="col">Discount Type</th>
+            <th scope="col">Discount Value</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let promocode of promocodes; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td scope="row">{{ promocode.code }}</td>
+            <td scope="row"> {{ promocode.type }}</td>
+            <td scope="row">
+              <!-- {{ promocode.subjectNames.join(', ') }} -->
+              <button type="button" class="btn btn-outline-secondary" popoverTitle="Valid for:" [autoClose]="'outside'"
+                [ngbPopover]="promocode.subjectNames.join(', ')">
+                Subjects
+              </button>
+            </td>
+            <td scope="row"> {{ promocode.discountType }}</td>
+            <td scope="row"> {{ promocode.discountValue }}</td>
+            <td scope="row">
+              <p *ngIf="promocode.status=='active'" class="text-success">{{ promocode.status }}</p>
+              <p *ngIf="promocode.status=='disabled'" class="text-danger">{{ promocode.status }}</p>
+            </td>
+            <td scope="row">
+              <button *ngIf="promocode.status=='active'" class="btn btn-warning"
+                (click)="onDisable(promocode)">Disable</button>
+              <button *ngIf="promocode.status=='disabled'" class="btn btn-success"
+                (click)="onActivate(promocode)">Activate</button>
+              <button class="btn btn-danger" (click)="onDelete(promocode)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </ng-template>
+  </div>
+</div>

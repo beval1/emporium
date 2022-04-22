@@ -1,0 +1,26 @@
+<div class="container">
+  <div id="sidebar" class="d-flex flex-column sidebar shadow bg-white rounded-container py-2">
+    <ul class="nav nav-pills flex-column text-center">
+      <li>
+        <a routerLink="/user/profile" class="nav-link" aria-current="page" [ngClass]="{
+            'active': getCurrentRoute() == '/user/profile'
+        }">
+          My Profile
+        </a>
+      </li>
+      <li>
+        <a routerLink="/user/my-orders" class="nav-link" [ngClass]="{
+                  'active': getCurrentRoute() == '/user/my-orders'
+              }">My Orders</a>
+      </li>
+      <li>
+        <a routerLink="/user/favourites" class="nav-link" aria-current="page" [ngClass]="{
+            'active': getCurrentRoute() == '/user/favourites'
+        }">
+          Favourites
+        </a>
+      </li>
+    </ul>
+  </div>
+  <button (click)="signOut()" class="btn btn-primary btn-block mt-3 rounded-container w-100" type="submit">Log Out</button>
+</div>

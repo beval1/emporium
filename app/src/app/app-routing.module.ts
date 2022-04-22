@@ -27,7 +27,7 @@ import { SubcategoryProductsComponent } from './pages/subcategory-products/subca
 import { ManageProductsComponent } from './admin/manage-products/manage-products.component';
 import { PendingOrdersComponent } from './seller/pending-orders/pending-orders.component';
 import { ArchivedOrdersComponent } from './seller/archived-orders/archived-orders.component';
-import { ManagePromoCodesComponent } from './seller/manage-promo-codes/manage-promo-codes.component';
+import { ManagePromoCodesComponent } from './seller/manage-promocodes/manage-promocodes.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },

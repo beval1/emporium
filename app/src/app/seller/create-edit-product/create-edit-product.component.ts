@@ -21,7 +21,6 @@ import {
 import { ProductService } from '../../shared/services/product/product.service';
 import { IProductSpecification } from 'src/app/shared/interfaces/IProductSpecification';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { NotificationsService } from 'src/app/notification/services/notifications.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IProduct } from 'src/app/shared/interfaces/IProduct';
 

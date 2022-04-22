@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { ManagePromoCodesComponent } from './manage-promo-codes.component';
+import { ManagePromoCodesComponent } from './manage-promocodes.component';
 
 describe('ManagePromoCodesComponent', () => {
   let component: ManagePromoCodesComponent;

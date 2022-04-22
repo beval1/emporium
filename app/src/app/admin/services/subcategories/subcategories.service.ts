@@ -42,6 +42,26 @@ export class SubcategoriesService {
       .valueChanges();
   }
 
+  async getAllSubcategories(): Promise<ISubcategory[]> {
+    let subcategories: ISubcategory[] = [];
+    await firstValueFrom(this.categoriesService.getAllCategories()).then(
+      (categories: ICategory[]) => {
+        categories.forEach(async (c) => {
+          await firstValueFrom(this.fireStore
+            .collection<ISubcategory>(`categories/${c.uid}/subcategories`)
+            .valueChanges()).then((subs: ISubcategory[]) => {
+              if (subs.length > 0){
+                subs.forEach((sub: ISubcategory) => subcategories.push(sub))
+              }
+            });
+            return subcategories;
+        });
+      }
+    );
+    // console.log(subcategories)
+    return subcategories;
+  }
+
   async createSubcategory(
     categoryName: string,
     categoryId: string,
@@ -95,8 +115,8 @@ export class SubcategoriesService {
       )
       .catch((error) => {
         this.notificationsService.showError(`Error: ${error.message}`);
-      }).finally(() => this.loaderService.hide());
-
+      })
+      .finally(() => this.loaderService.hide());
   }
 
   async deleteSubCategoryById(

@@ -12,7 +12,6 @@ import { SubcategoriesService } from '../services/subcategories/subcategories.se
 import { SpecificationsService } from '../services/specifications/specifications.service';
 import { ISpecification } from 'src/app/shared/interfaces/ISpecification';
 import { SpecificationType } from 'src/app/shared/enums/SpecificationTypeEnum';
-import { NotificationsService } from 'src/app/notification/services/notifications.service';
 import { ICategory } from 'src/app/shared/interfaces/ICategory';
 import { CategoriesService } from '../services/categories/categories.service';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';

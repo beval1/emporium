@@ -1,0 +1,24 @@
+.container {
+  width: 300px;
+  // margin-right: 20px;
+}
+.priceRange {
+  width: 100%;
+  accent-color: red;
+}
+.price-range-inputs > input {
+  width: 46%;
+}
+
+.custom-slider {
+  // .ngx-slider {
+  //   .ngx-slider-selection {
+  //     background: rgb(255, 255, 0) !important;
+  //   }
+  // }
+  color: red;
+}
+
+.custom-slider .ngx-slider .ngx-slider-selection {
+  background: rgb(255, 255, 0) !important;
+}

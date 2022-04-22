@@ -5,7 +5,7 @@
             <li><a routerLink="/" class="nav-link text-white px-0 text-decoration-none h5">Home</a></li>
             <li><a routerLink="/categories" class="nav-link text-white  text-decoration-none h5">Categories</a></li>
             <li><a routerLink="/today-deals" class="nav-link text-white px-1 text-decoration-none h5">Today's Deals</a></li>
-            <li><a routerLink="/register-seller" class="nav-link text-white  text-decoration-none h5">Become Seller</a></li>
+            <li *ngIf="(isLogged$ | async) == false"><a routerLink="/register-seller" class="nav-link text-white  text-decoration-none h5">Become Seller</a></li>
         </ul>
         <ul class="d-flex list-unstyled">
             <li><a routerLink="/faq" class="nav-link text-white text-decoration-none h5">FAQ</a></li>

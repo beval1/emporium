@@ -15,10 +15,11 @@ export class CategoriesComponent implements OnInit, OnDestroy {
 
   constructor(private categoriesService: CategoriesService,
     private router: Router) {
-    this.categoriesSubscription = this.categoriesService
+      this.categoriesSubscription = this.categoriesService
       .getAllCategories()
       .subscribe((categories: ICategory[]) => {
         this.categories = categories;
+        console.log(categories)
     });
   }
 

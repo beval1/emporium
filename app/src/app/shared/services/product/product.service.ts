@@ -176,7 +176,6 @@ export class ProductService {
     this.loaderService.show()
     await this.fireStore
       .collection<IProduct>(
-        // `categories/${categoryId}/subcategories/${subcategoryId}/products`
         `products`
       )
       .doc(productId)
@@ -191,7 +190,6 @@ export class ProductService {
   getProductById(productId: string): Observable<IProduct | undefined> {
     return this.fireStore
       .collection<IProduct>(
-        // `categories/${categoryId}/subcategories/${subcategoryId}/products`
         `products`
       )
       .doc(productId)

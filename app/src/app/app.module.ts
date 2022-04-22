@@ -31,6 +31,7 @@ import { LoaderService } from './shared/services/loader/loader.service';
 import { LoaderInterceptor } from './shared/interceptors/loader/loader.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SubcategoryProductsComponent } from './pages/subcategory-products/subcategory-products.component';
+import { UserModule } from './user/user.module';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { SubcategoryProductsComponent } from './pages/subcategory-products/subca
     AuthModule,
     AdminModule,
     SellerModule,
+    UserModule,
     SharedModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

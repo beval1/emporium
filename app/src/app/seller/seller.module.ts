@@ -10,7 +10,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NotificationComponent } from './notification/notification.component';
 import { ArchivedOrdersComponent } from './archived-orders/archived-orders.component';
 import { PendingOrdersComponent } from './pending-orders/pending-orders.component';
-import { ManagePromoCodesComponent } from './manage-promo-codes/manage-promo-codes.component';
+import { ManagePromoCodesComponent } from './manage-promocodes/manage-promocodes.component';
+import { NgbDropdown, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -31,6 +32,7 @@ import { ManagePromoCodesComponent } from './manage-promo-codes/manage-promo-cod
     ReactiveFormsModule,
     FormsModule,
     FontAwesomeModule,
+    NgbModule,
   ]
 })
 export class SellerModule { }
