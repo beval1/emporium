@@ -8,7 +8,8 @@
 </ul>
  
  <h2>Functionality</h2>
- There are three types of users - user, admin and seller <br />
+ <p>There are three types of users - user, admin and seller</p>
+ <br />
  Admins can:
         <ul>
             <li>create categories</li>
