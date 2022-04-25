@@ -1,5 +1,5 @@
 # emporium - https://emporium-1710b.web.app/
- <h3>Technologies used</h3>
+ <h2>Technologies used</h2>
 <ul>
  <li>Node.js</li>
  <li>Angular 13</li>
@@ -7,7 +7,7 @@
  <li>NgBootstrap</li>
 </ul>
  
- <h3>Functionality</h3>
+ <h2>Functionality</h2>
  There are three types of users - user, admin and seller
  
  Admins can:
@@ -41,22 +41,24 @@
             <li>ask question for product - not implemented</li>
         </ul>
         
-  <h3>Test</h3>
-  <p>
+  <h2>Test</h2>
+  <ul>
+  <li><p>
   Admin credentials: <br />
   email: admin@admin.com <br />
   password: 12345678
- </p>
-   <p>
+   </p></li>
+  <li> <p>
   Seller credentials: <br />
   email: sellernew@seller.com <br />
   password: 12345678
- </p>
-    <p>
+   </p> </li>
+  <li>  <p>
   User credentials: <br />
   email: user@user.com <br />
   password: 12345678
- </p>
+   </p></li>
+ </ul>
  
  
  
