@@ -32,10 +32,11 @@ import { LoaderInterceptor } from './shared/interceptors/loader/loader.intercept
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SubcategoryProductsComponent } from './pages/subcategory-products/subcategory-products.component';
 import { UserModule } from './user/user.module';
+import { CartComponent } from './cart/cart.component';
 
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     HomeComponent,
     NotFoundComponent,
@@ -45,7 +46,8 @@ import { UserModule } from './user/user.module';
     CategoriesComponent,
     SubcategoriesComponent,
     SubcategoryProductsComponent,
-  ],
+      CartComponent
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule,

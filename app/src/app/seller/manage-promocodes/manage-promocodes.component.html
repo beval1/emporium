@@ -122,7 +122,6 @@
             <td scope="row">{{ promocode.code }}</td>
             <td scope="row"> {{ promocode.type }}</td>
             <td scope="row">
-              <!-- {{ promocode.subjectNames.join(', ') }} -->
               <button type="button" class="btn btn-outline-secondary" popoverTitle="Valid for:" [autoClose]="'outside'"
                 [ngbPopover]="promocode.subjectNames.join(', ')">
                 Subjects

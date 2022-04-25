@@ -28,6 +28,7 @@ import { ManageProductsComponent } from './admin/manage-products/manage-products
 import { PendingOrdersComponent } from './seller/pending-orders/pending-orders.component';
 import { ArchivedOrdersComponent } from './seller/archived-orders/archived-orders.component';
 import { ManagePromoCodesComponent } from './seller/manage-promocodes/manage-promocodes.component';
+import { CartComponent } from './cart/cart.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -41,8 +42,8 @@ const routes: Routes = [
   { path: 'registration-completed', component: RegistrationCompletedComponent},
   //User
   { path: 'user/profile', component: ProfileComponent, canActivate: [LoggedGuard, UserGuard]},
-  { path: 'user/favourites', component: WishlistComponent}, //no guard for the whishlist
-  //{ path: 'cart', component: CartComponent}, //no guard for the cart
+  { path: 'favourites', component: WishlistComponent}, //no guard for the whishlist
+  { path: 'cart', component: CartComponent}, //no guard for the cart
   //Admin
   { path: 'admin/dashboard', component: DashboardComponent, canActivate: [LoggedGuard, AdminGuard]},
   { path: 'admin/manage-categories', component: ManageCategoriesComponent, canActivate: [LoggedGuard, AdminGuard]},
