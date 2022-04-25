@@ -10,7 +10,7 @@
  <h2>Functionality</h2>
  <p>There are three types of users - user, admin and seller</p>
 
- Admins can:
+ <p>Admins can</p>:
         <ul>
             <li>create categories</li>
             <li>create subcategories</li>
@@ -19,7 +19,7 @@
             <li>ban seller</li>
             <li>hide specific seller's products</li>
         </ul>
-        Sellers can
+       <p>Sellers can:</p>
         <ul>
             <li>create products based on specific subcategory and its specifications (which are managed by admin)</li>
             <li>delete product</li>
@@ -29,7 +29,7 @@
             <li>process orders - when user makes an order, seller can mark it as 'Products Sent'</li>
             <li>answer product questions - not implemented</li>
         </ul>
-        Users can:
+        <p>Users can:</p>
         <ul>
             <li>browse products</li>
             <li>add products to cart</li>
