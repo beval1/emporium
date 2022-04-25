@@ -10,7 +10,7 @@
  <h2>Functionality</h2>
  <p>There are three types of users - user, admin and seller</p>
 
- <p>Admins can</p>:
+ <p>Admins can:</p>
         <ul>
             <li>create categories</li>
             <li>create subcategories</li>
