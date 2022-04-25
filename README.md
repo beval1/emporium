@@ -1,30 +1,67 @@
-# emporium - online marketplace
- This project is made with Angular and Firebase(AngularFire)
+# emporium - https://emporium-1710b.web.app/
+ <h3>Technologies used</h3>
+<ul>
+ <li>Node.js</li>
+ <li>Angular 13</li>
+ <li>Firebase(AngularFire)</li>
+ <li>NgBootstrap</li>
+</ul>
  
+ <h3>Functionality</h3>
  There are three types of users - user, admin and seller
  
  Admins can:
- -create categories
- -create subcategories
- -create specifications for each subcategory
- -approve or ban seller
- -approve or hide specific seller's products
+        <ul>
+            <li>create categories</li>
+            <li>create subcategories</li>
+            <li>create specifications for each subcategory</li>
+            <li>approve seller</li>
+            <li>ban seller</li>
+            <li>hide specific seller's products</li>
+        </ul>
+        Sellers can
+        <ul>
+            <li>create products based on specific subcategory and its specifications (which are managed by admin)</li>
+            <li>delete product</li>
+            <li>edit product</li>
+            <li>create promocodes which can be used by users on checkout. Promocodes are two types - percent based and fixed number</li>
+            <li>disable, enable or delete promocodes</li>
+            <li>process orders - when user makes an order, seller can mark it as 'Products Sent'</li>
+            <li>answer product questions - not implemented</li>
+        </ul>
+        Users can:
+        <ul>
+            <li>browse products</li>
+            <li>add products to cart</li>
+            <li>make an order</li>
+            <li>add products to favourites (wishlist)</li>
+            <li>edit their own profile </li>
+            <li>check already made orders and their status</li>
+            <li>leave review for product - not implemented</li>
+            <li>ask question for product - not implemented</li>
+        </ul>
+        
+  <h3>Test</h3>
+  <p>
+  Admin credentials: <br />
+  email: admin@admin.com <br />
+  password: 12345678
+ </p>
+   <p>
+  Seller credentials: <br />
+  email: sellernew@seller.com <br />
+  password: 12345678
+ </p>
+    <p>
+  User credentials: <br />
+  email: user@user.com <br />
+  password: 12345678
+ </p>
  
- Sellers can:
- -create products based on specific subcategory and its specifications (which are managed by admin)
- -delete or edit already created product
- -create promocodes which can be used by users on checkout. Promocodes are two types - percent based and fixed number
- -disable, enable or delete promocodes
- -process orders - when user makes an order, seller can mark it as 'Products Sent'
- -answer product questions - not implemented
  
- Users can:
- -browse products
- -add products to cart
- -make an order
- -add products to favourites (wishlist)
- -edit their own profile 
- -check already made orders and their status
- -leave review for product - not implemented
- -ask question for product - not implemented
+ 
+
+
+
+
 
