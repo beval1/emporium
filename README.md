@@ -26,19 +26,19 @@
             <li>edit product</li>
             <li>create promocodes which can be used by users on checkout. Promocodes are two types - percent based and fixed number</li>
             <li>disable, enable or delete promocodes</li>
-            <li>process orders - when user makes an order, seller can mark it as 'Products Sent'</li>
-            <li>answer product questions - not implemented</li>
+            <li>process orders - when user makes an order, seller can mark it as 'Products Sent' - not implemeted yet</li>
+            <li>answer product questions - not implemented yet</li>
         </ul>
         <p>Users can:</p>
         <ul>
             <li>browse products</li>
-            <li>add products to cart</li>
-            <li>make an order</li>
-            <li>add products to favourites (wishlist)</li>
-            <li>edit their own profile </li>
-            <li>check already made orders and their status</li>
-            <li>leave review for product - not implemented</li>
-            <li>ask question for product - not implemented</li>
+            <li>add products to cart - not implemented yet</li>
+            <li>make an order - not implemented</li>
+            <li>add products to favourites (wishlist) - not implemented yet</li>
+            <li>edit their own profile - not impelemented yet</li>
+            <li>check already made orders and their status - not implemented yet</li>
+            <li>leave review for product - not implemented yet</li>
+            <li>ask question for product - not implemented yet</li>
         </ul>
         
   <h2>Test</h2>
