@@ -26,7 +26,7 @@
         <div *ngIf="productPrice">
           <p class="product-price">{{productPrice[0]}}<sup>{{productPrice[1] || '00'}}</sup> BGN</p>
       </div>
-      <div *ngIf="productPrice != undefined && productPrice[0]=='0'">
+      <div *ngIf="productPrice != undefined && productPrice[0]=='0' && productPrice[1]=='0'">
         <p class="product-price">Free</p>
       </div>
       <button class="btn btn-success add-to-cart-btn w-100">

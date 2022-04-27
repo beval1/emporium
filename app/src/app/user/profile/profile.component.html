@@ -1,8 +1,61 @@
 <div class="d-flex">
   <app-user-aside></app-user-aside>
-  <div class="container shadow bg-white align-items-center rounded-container">
-
+  <div class="container shadow bg-white align-items-center rounded-container pt-4 pb-4">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+      <div class="wrapper d-flex justify-content-center">
+        <div class="profile-pic d-col">
+          <img class="image d-block mx-auto" [src]="
+          user !== null && user.photoURL
+            ? user.photoURL
+            : '../../../../assets/no-thumbnail.jpg'
+        " alt="Profile Picture" />
+          <div *ngIf="editable" class="profile-picture-upload">
+            <!-- <label class="form-label" for="profile-pic">Image</label> -->
+            <input class="form-control w-75 mt-2 mx-auto" id="profile-pic" type="file" accept=".png,.jpg"
+              (change)="onUpload($event.target)" />
+          </div>
+          <div class="btn-edit text-center">
+            <button *ngIf="!editable" class="btn btn-warning w-100 mt-2" (click)="onClickEdit()">Edit Profile</button>
+            <button *ngIf="editable" class="btn btn-primary w-75 mt-2" type="submit">Update</button>
+          </div>
+        </div>
+        <div class="profile-info d-col">
+          <h1 class="welcome-msg">Welcome, {{user?.displayName}}</h1>
+          <div class="d-flex flex-row">
+            <div>
+              <div class="display-name">
+                <label for="display-name">Name</label> <br>
+                <input formControlName="displayName" class="form-control" type="text" id="display-name">
+                <div class="text-danger mb-1" *ngIf="hasFieldError(editForm, 'displayName', 'required')">
+                  Display name is required!
+                </div>
+                <div class="text-danger mb-1" *ngIf="hasFieldError(editForm, 'displayName', 'minlength')">
+                  Display name can't be less than 4
+                </div>
+              </div>
+              <div class="phone-number">
+                <label for="phone-number">Phone Number</label> <br>
+                <input formControlName="phoneNumber" class="form-control" type="text" id="phone-number">
+                <div class="text-danger mb-1" *ngIf="hasFieldError(editForm, 'phoneNumber', 'required')">
+                  Phone number is required!
+                </div>
+                <div class="text-danger mb-1" *ngIf="hasFieldError(editForm, 'phoneNumber', 'invalidPhone')">
+                  Phone number is invalid!
+                </div>
+              </div>
+              <div class="email">
+                <label *ngIf="!editable" for="email">Email</label>
+                <label *ngIf="editable" for="email">Email - not changable!</label>
+                <br>
+                <input formControlName="email" class="form-control" type="text" id="email">
+              </div>
+              <div *ngIf="editable" class="btn-cancel text-center">
+                <button class="btn btn-danger w-100 mt-3" (click)="onCancel()">Cancel changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
-
-

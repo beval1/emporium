@@ -9,7 +9,6 @@ import {
   validateAllFormFields,
 } from 'src/app/shared/utils/validate';
 import { CategoriesService } from '../services/categories/categories.service';
-import { NotificationsService } from 'src/app/notification/services/notifications.service';
 
 @Component({
   selector: 'app-manage-categories',

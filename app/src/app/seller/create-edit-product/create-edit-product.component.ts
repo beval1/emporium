@@ -7,7 +7,6 @@ import { resetForm } from 'src/app/shared/utils/forms';
 import { ISubcategory } from 'src/app/shared/interfaces/ISubcategory';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';

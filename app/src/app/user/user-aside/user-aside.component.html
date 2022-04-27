@@ -27,6 +27,13 @@
           Cart
         </a>
       </li>
+      <li>
+        <a routerLink="/user/addresses" class="nav-link" aria-current="page" [ngClass]="{
+            'active': getCurrentRoute() == '/user/addresses'
+        }">
+          My Addresses
+        </a>
+      </li>
     </ul>
   </div>
   <button (click)="signOut()" class="btn btn-primary btn-block mt-3 rounded-container w-100" type="submit">Log Out</button>

@@ -1,21 +1,16 @@
-.sidebar {
-    height: min-content;
-    max-height: min-content;
-    background-color: white;
-    width: 250px;
-    // position: sticky;
-    top:6vh;
+.image {
+  height: 180px;
+  width: 180px;
+  border-radius: 50%;
+  border: 2px solid black;
+  object-fit: contain;
 }
-
-.nav > li > a {
-    color: black;
-    font-size: large;
+.profile-info {
+  margin-left: 50px;
+  // border-right: 2px solid blue;
 }
-.active {
-    color: white !important;
-    background-color: #FBBE81 !important;
-}
-
-button {
-    width: 250px;
+.d-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
