@@ -32,10 +32,11 @@
         <p>Users can:</p>
         <ul>
             <li>browse products</li>
+            <li>edit their own profile</li>
+            <li>add multiple addresses</li>
             <li>add products to cart - not implemented yet</li>
             <li>make an order - not implemented</li>
             <li>add products to favourites (wishlist) - not implemented yet</li>
-            <li>edit their own profile - not impelemented yet</li>
             <li>check already made orders and their status - not implemented yet</li>
             <li>leave review for product - not implemented yet</li>
             <li>ask question for product - not implemented yet</li>
