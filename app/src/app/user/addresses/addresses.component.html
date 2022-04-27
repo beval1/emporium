@@ -1,0 +1,83 @@
+<div class="d-flex">
+  <app-user-aside></app-user-aside>
+  <div class="container shadow bg-white align-items-center rounded-container pt-4 pb-4">
+    <button class="btn btn-success mb-2" (click)="openModal(addAddress)">Create new address</button>
+
+    <ng-template #addAddress>
+      <div class="p-5">
+        <h3>Add new address</h3>
+        <hr>
+        <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+          <div class="form-group mb-2">
+            <label for="address-name" class="form-label">Address Name</label>
+            <input formControlName="name" type="text" class="form-control" [ngClass]="{
+              'is-invalid': hasAnyError(addressForm, 'name')
+            }" />
+            <div class="text-danger mb-1" *ngIf="hasFieldError(addressForm, 'name', 'required')">
+              Address name is required!
+            </div>
+          </div>
+          <div class="form-group mb-2">
+            <label for="address-city" class="form-label">City</label>
+            <input formControlName="city" type="text" class="form-control" [ngClass]="{
+              'is-invalid': hasAnyError(addressForm, 'city')
+            }" />
+            <div class="text-danger mb-1" *ngIf="hasFieldError(addressForm, 'city', 'required')">
+              City is required!
+            </div>
+          </div>
+          <div class="form-group mb-2">
+            <label for="address" class="form-label">Address</label>
+            <input formControlName="address" type="text" class="form-control" [ngClass]="{
+              'is-invalid': hasAnyError(addressForm, 'address')
+            }" />
+            <div class="text-danger mb-1" *ngIf="hasFieldError(addressForm, 'address', 'required')">
+              Address is required!
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-success" type="submit">Add</button>
+            <button class="btn btn-danger" type="submit" (click)="onCancel()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+
+    <div *ngIf="
+    addresses === undefined || addresses.length == 0;
+    then noAddresses;
+    else table
+  "></div>
+
+    <ng-template #noAddresses>
+      <h5 class="text-center m-5">There are no addresses!</h5>
+    </ng-template>
+
+    <ng-template #table>
+      <table class="table table-hover">
+        <thead class="text-center">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Address Name</th>
+            <th scope="col">City</th>
+            <th scope="col">Address</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let address of addresses; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td scope="row">{{ address.name }}</td>
+            <td scope="row">
+              {{address.city}}
+            </td>
+            <td>{{address.address}}</td>
+            <td>
+              <button class="btn btn-danger" (click)="onDelete(address)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </div>
+</div>

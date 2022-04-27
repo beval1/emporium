@@ -12,6 +12,7 @@ import { firstValueFrom, Observable, of } from 'rxjs';
 import { NotificationsService } from 'src/app/notification/services/notifications.service';
 import { LoaderService } from 'src/app/shared/services/loader/loader.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { IAddress } from 'src/app/shared/interfaces/IAddress';
 
 @Injectable({
   providedIn: 'root',
@@ -256,6 +257,52 @@ export class AuthService {
       this.notificationsService.showError('Not logged in!');
       return null;
     }
+  }
+
+  async addUserAddress(user: IUser, name: string, city: string, address: string){
+    this.loaderService.show();
+
+    const addressId = this.fireStore.createId();
+
+    const addressObj: IAddress = {
+      uid: addressId,
+      name: name,
+      city: city,
+      address: address,
+    }
+
+    await this.fireStore.collection(`users/${user.uid}/addresses`)
+      .doc(addressId)
+      .set(addressObj)
+      .then(() =>
+        this.notificationsService.showSuccess('Address added successfully!')
+      )
+      .catch((error) => {
+        this.notificationsService.showError(`Error: ${error.message}`);
+      })
+      .finally(() => this.loaderService.hide());
+  }
+  async deleteUserAddressById(user: IUser, addressId: string){
+    this.loaderService.show();
+    // let addressId = '';
+    // firstValueFrom(this.fireStore
+    //   .collection<IAddress>(`users/${user.uid}/addresses`, (ref) => ref.where('name', '==', addressName)))
+
+    await this.fireStore.collection(`users/${user.uid}/addresses`)
+      .doc(addressId)
+      .delete()
+      .then(() =>
+        this.notificationsService.showSuccess('Address deleted successfully!')
+      )
+      .catch((error) => {
+        this.notificationsService.showError(`Error: ${error.message}`);
+      })
+      .finally(() => this.loaderService.hide());
+  }
+  getUserAddresses(user: IUser): Observable<IAddress[]>{
+    return this.fireStore
+      .collection<IAddress>(`users/${user.uid}/addresses`)
+      .valueChanges();
   }
 
   getAllSellers(searchValue?: string): Observable<IUser[]> {

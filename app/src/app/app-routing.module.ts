@@ -29,6 +29,7 @@ import { PendingOrdersComponent } from './seller/pending-orders/pending-orders.c
 import { ArchivedOrdersComponent } from './seller/archived-orders/archived-orders.component';
 import { ManagePromoCodesComponent } from './seller/manage-promocodes/manage-promocodes.component';
 import { CartComponent } from './cart/cart.component';
+import { AddressesComponent } from './user/addresses/addresses.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -42,6 +43,7 @@ const routes: Routes = [
   { path: 'registration-completed', component: RegistrationCompletedComponent},
   //User
   { path: 'user/profile', component: ProfileComponent, canActivate: [LoggedGuard, UserGuard]},
+  { path: 'user/addresses', component: AddressesComponent, canActivate: [LoggedGuard, UserGuard]},
   { path: 'favourites', component: WishlistComponent}, //no guard for the whishlist
   { path: 'cart', component: CartComponent}, //no guard for the cart
   //Admin

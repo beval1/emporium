@@ -1,4 +1,6 @@
 .angular
 .firebase
+app\.firebase
 .*
-app\src\environments\environment.prod.ts
+environment.prod.ts
+*.cache
