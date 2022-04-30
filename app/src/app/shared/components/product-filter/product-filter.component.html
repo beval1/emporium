@@ -5,7 +5,7 @@
       <hr>
       <label for="select-order" class="form-label">Order by</label>
       <br>
-      <select name="order" id="order" class="form-select">
+      <select [(ngModel)]="selectedOrder" (ngModelChange)="onOrderChange()" name="order" id="order" class="form-select">
         <option value="Ascending" selected>Price - Ascending</option>
         <option value="Descending">Price - Descending</option>
       </select>

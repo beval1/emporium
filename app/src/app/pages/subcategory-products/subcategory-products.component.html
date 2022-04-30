@@ -1,8 +1,8 @@
 <div class="container d-flex">
-  <app-product-filter *ngIf="products.length > 0" [minProductPrice]="minProductPrice" [maxProductPrice]="maxProductPrice"></app-product-filter>
+  <app-product-filter *ngIf="filteredProducts.length > 0" (priceChanged)="onPriceChange($event)" (orderChanged)="onOrderChange($event)" [minProductPrice]="minProductPrice" [maxProductPrice]="maxProductPrice"></app-product-filter>
   <div class="">
     <div class="products-wrapper d-flex flex-row flex-wrap">
-      <div *ngFor="let product of products">
+      <div *ngFor="let product of filteredProducts">
         <app-product [product]="product" [liked]="isLiked(product.uid)"></app-product>
       </div>
     </div>

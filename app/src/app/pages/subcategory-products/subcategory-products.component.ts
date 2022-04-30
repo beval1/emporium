@@ -13,7 +13,8 @@ import { WishlistService } from 'src/app/shared/services/wishlist/wishlist.servi
   styleUrls: ['./subcategory-products.component.scss'],
 })
 export class SubcategoryProductsComponent implements OnInit, OnDestroy {
-  products: IProduct[] = [];
+  filteredProducts: IProduct[] = [];
+  allProducts: IProduct[] = []
   subscriptions: Subscription[] = [];
   minProductPrice = 0;
   maxProductPrice = 0;
@@ -36,15 +37,20 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
           this.productsService
             .getAllProductsForSubcategory(subcategoryId)
             .subscribe((products: IProduct[]) => {
-              this.products = products;
+              this.filteredProducts = products;
+              this.allProducts = products;
               this.minProductPrice = this.getMinProductPrice();
               this.maxProductPrice = this.getMaxProductPrice();
             })
         );
         this.user = this.authService.getCurrentUserObject();
-        this.subscriptions.push(this.wishlistService.getWishlistProductIds(this.user).subscribe((products: string[]) => {
-          this.userLikedProducts = products;
-        }));
+        this.subscriptions.push(
+          this.wishlistService
+            .getWishlistProductIds(this.user)
+            .subscribe((filteredProducts: string[]) => {
+              this.userLikedProducts = filteredProducts;
+            })
+        );
       }
     });
   }
@@ -57,7 +63,7 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
   }
 
   private getMinProductPrice() {
-    return this.products.sort((a, b) => {
+    return this.filteredProducts.sort((a, b) => {
       if (a.price > b.price) {
         return 1;
       } else if (a.price < b.price) {
@@ -67,17 +73,17 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
     })[0].price;
   }
   private getMaxProductPrice() {
-    return this.products.sort((a, b) => {
+    return this.filteredProducts.sort((a, b) => {
       if (a.price > b.price) {
         return 1;
       } else if (a.price < b.price) {
         return -1;
       }
       return 0;
-    })[this.products.length - 1].price;
+    })[this.filteredProducts.length - 1].price;
   }
   private orderAscending() {
-    this.products = this.products.sort((a, b) => {
+    this.filteredProducts = this.filteredProducts.sort((a, b) => {
       if (a.price > b.price) {
         return 1;
       }
@@ -88,7 +94,7 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
     });
   }
   private orderDescending() {
-    this.products = this.products.sort((a, b) => {
+    this.filteredProducts = this.filteredProducts.sort((a, b) => {
       if (a.price > b.price) {
         return -1;
       }
@@ -97,5 +103,19 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
       }
       return 0;
     });
+  }
+
+  onPriceChange(priceRange: number[]) {
+    this.filteredProducts = this.allProducts.filter(
+      (product: IProduct) =>
+        product.price >= priceRange[0] && product.price <= priceRange[1]
+    );
+  }
+  onOrderChange(order: string) {
+    if (order == 'Ascending') {
+      this.orderAscending();
+    } else if (order == 'Descending') {
+      this.orderDescending();
+    }
   }
 }
