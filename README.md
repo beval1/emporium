@@ -1,4 +1,6 @@
 # emporium - https://emporium-1710b.web.app/
+![image](https://user-images.githubusercontent.com/86118441/166098896-356ee36a-439e-481a-88c6-3fdd0ee963d7.png)
+
  <h2>Technologies used</h2>
 <ul>
  <li>Node.js</li>
