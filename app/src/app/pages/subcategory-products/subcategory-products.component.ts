@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { min, Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/services/auth.service';
 import { IProduct } from 'src/app/shared/interfaces/IProduct';
+import { IUser } from 'src/app/shared/interfaces/IUser';
 import { ProductService } from 'src/app/shared/services/product/product.service';
+import { WishlistService } from 'src/app/shared/services/wishlist/wishlist.service';
 
 @Component({
   selector: 'app-subcategory-products',
@@ -14,9 +17,13 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
   minProductPrice = 0;
   maxProductPrice = 0;
+  userLikedProducts: string[] = [];
+  user: IUser | null = null;
 
   constructor(
     private productsService: ProductService,
+    private wishlistService: WishlistService,
+    private authService: AuthService,
     private route: ActivatedRoute
   ) {}
 
@@ -34,11 +41,19 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
               this.maxProductPrice = this.getMaxProductPrice();
             })
         );
+        this.user = this.authService.getCurrentUserObject();
+        this.wishlistService.getWishlistProductIds(this.user).then(likedProducts => {
+          this.userLikedProducts = likedProducts
+        })
       }
     });
   }
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
+  }
+
+  isLiked(productId: string): boolean {
+    return this.userLikedProducts.includes(productId);
   }
 
   private getMinProductPrice() {

@@ -1,1 +1,33 @@
-<p>wishlist works!</p>
+<div class="container shadow bg-white align-items-center rounded-container pt-4 pb-4">
+  <h3>Favourites</h3>
+  <hr>
+  <div *ngIf="likedProducts.length > 0 then products; else noProducts"></div>
+  <ng-template #noProducts>
+    <p>There aren't any favourites!</p>
+  </ng-template>
+
+  <ng-template #products>
+  <div  *ngFor="let product of likedProducts">
+    <div class="product-card d-flex flex-row">
+      <div class="product-image">
+        <img [routerLink]="['/product', product?.uid]" class="product-image" [src]="
+        product !== null && product.images != undefined && product.images.length > 0
+          ? product.images[0]
+          : '../../../../assets/no-thumbnail.jpg'
+      " alt="Product Picture" />
+      </div>
+      <div class="product-info">
+        <a class="product-link" [routerLink]="['/product', product?.uid]">{{product.name}}</a>
+      </div>
+
+    </div>
+    <div class="buttons">
+      <button class="btn btn-primary">View More</button>
+      <button class="btn btn-success">Add to Cart</button>
+      <button class="btn btn-danger" (click)="onDelete(product)">Delete</button>
+    </div>
+    <hr>
+  </div>
+</ng-template>
+</div>
+

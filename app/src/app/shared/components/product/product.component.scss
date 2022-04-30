@@ -66,10 +66,13 @@ sup {
   color: #f2db5a;
   font-size: larger;
 }
-.fa-heart-regular{
+.fa-heart{
   position: relative;
   bottom: 2px;
   left: 5px;
+}
+.fa-heart-solid {
+  color: red;
 }
 .buttons-wrapper {
   position: absolute;

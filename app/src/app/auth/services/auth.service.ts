@@ -242,6 +242,7 @@ export class AuthService {
       .then(() => this.notificationsService.showSuccess('Logged out!'))
       .catch((error) => this.notificationsService.showError(error))
       .finally(() => this.loaderService.hide());
+    localStorage.clear();
     this.router.navigateByUrl('/');
   }
 
@@ -254,7 +255,7 @@ export class AuthService {
     if (user) {
       return JSON.parse(user);
     } else {
-      this.notificationsService.showError('Not logged in!');
+      // this.notificationsService.showError('Not logged in!');
       return null;
     }
   }

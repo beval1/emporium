@@ -3,7 +3,8 @@
     *ngIf="isActive()">
     <div class="product-card-header p-1">
       <div class="buttons-wrapper ">
-        <fa-icon class="fa-heart-regular fa-2x" [icon]="faHeart"></fa-icon>
+        <fa-icon *ngIf="!liked" class="fa-heart fa-heart-regular fa-2x" [icon]="faHeart" (click)="onLike()"></fa-icon>
+        <fa-icon *ngIf="liked" class="fa-heart fa-heart-solid fa-2x" [icon]="faHeartSolid" (click)="onDislike()"></fa-icon>
       </div>
     </div>
     <div class="product-card-body">

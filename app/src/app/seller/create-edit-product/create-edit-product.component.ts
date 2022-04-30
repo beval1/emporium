@@ -196,7 +196,6 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
     }
     // let sellerId: string = user.uid;
 
-    let functionResult = false;
     if (this.editForm && this.editableProduct) {
       this.productsService.updateProduct(
         this.editableProduct.uid,
@@ -209,7 +208,15 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
         this.filesToUpload,
         user,
         productQuantity,
-      ).then(result => functionResult=result);
+      ).then(result => {
+        if (result){
+          if(result){
+            this.productForm.reset();
+            this.selectedCategory = '';
+            this.selectedSubcategory = '';
+          }
+        }
+      });
       this.router.navigateByUrl('/seller/all-products');
     } else {
       this.productsService.addProduct(
@@ -223,15 +230,18 @@ export class CreateEditProductComponent implements OnInit, OnDestroy {
         user,
         productQuantity,
         'awaiting approval'
-      ).then(result => functionResult=result);
+      ).then(result => {
+        if (result){
+          if(result){
+            this.productForm.reset();
+            this.selectedCategory = '';
+            this.selectedSubcategory = '';
+          }
+        }
+      });
     }
 
-    console.log(functionResult)
-    if(functionResult){
-      this.productForm.reset();
-      this.selectedCategory = '';
-      this.selectedSubcategory = '';
-    }
+
 
   }
 

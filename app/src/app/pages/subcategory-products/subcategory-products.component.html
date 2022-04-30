@@ -3,7 +3,7 @@
   <div class="">
     <div class="products-wrapper d-flex flex-row flex-wrap">
       <div *ngFor="let product of products">
-        <app-product [product]="product"></app-product>
+        <app-product [product]="product" [liked]="isLiked(product.uid)"></app-product>
       </div>
     </div>
   </div>
