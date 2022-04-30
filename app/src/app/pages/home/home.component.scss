@@ -10,10 +10,20 @@
 }
 .benefits {
   background-color: #1D55C1;
-  position: absolute;
-  width: 100%;
+  position: static;
+  right: 0%;
+  width: 100vw;
   overflow: visible;
+  margin: 0 auto;
 }
 .benefits > p, h5, h2 {
   color: white
+}
+
+.become-seller > h3 {
+  color: white;
+}
+.btn-seller {
+  // position: relative;
+  margin-left: 30px;
 }

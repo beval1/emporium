@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { IProduct } from 'src/app/shared/interfaces/IProduct';
 import { ProductService } from 'src/app/shared/services/product/product.service';
 
@@ -32,7 +33,7 @@ export class HomeComponent implements OnInit {
   popularProducts: IProduct[] = [];
   newProducts: IProduct[] = [];
 
-  constructor(private productService: ProductService) {
+  constructor(private productService: ProductService, private router: Router) {
     productService
       .getMultipleProductsById(this.popularProductsIds)
       .then((products: IProduct[]) => (this.popularProducts = products));
@@ -42,4 +43,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  onBecomeSeller() {
+    this.router.navigateByUrl('/register-seller')
+  }
 }
