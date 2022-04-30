@@ -13,6 +13,7 @@ import { WishlistService } from '../shared/services/wishlist/wishlist.service';
 })
 export class WishlistComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
+  likedProductIds: string[] = [];
   likedProducts: IProduct[] = [];
   user: IUser | null = null;
 
@@ -23,23 +24,38 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = this.authService.getCurrentUserObject();
-    this.wishlistService.getWishlistProductIds(this.user).then((productIds) => {
-      if (productIds) {
-        this.subscriptions.push(
+    // this.wishlistService.getWishlistProductIds(this.user).then((productIds) => {
+    //   if (productIds) {
+    //     this.subscriptions.push(
+    //       this.wishlistService
+    //         .getWishlistProductObjects(productIds)
+    //         .subscribe((products: IProduct[]) => {
+    //           this.likedProducts = products;
+    //         })
+    //     );
+    //   }
+    // });
+    this.subscriptions.push(
+      this.wishlistService
+        .getWishlistProductIds(this.user)
+        .subscribe((productIds: any[]) => {
+          this.likedProductIds = productIds;
+          console.log(`ProductIds: ${productIds}`);
+
           this.wishlistService
-            .getWishlistProductObjects(productIds)
-            .subscribe((products: IProduct[]) => {
+            .getWishlistProductObjects(this.likedProductIds)
+            .then((products: IProduct[]) => {
               this.likedProducts = products;
-            })
-        );
-      }
-    });
+              console.log(this.likedProducts);
+            });
+        })
+    );
   }
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
-  onDelete(product: IProduct){
+  onDelete(product: IProduct) {
     this.wishlistService.deleteFromWishlist(this.user, product.uid);
   }
 }

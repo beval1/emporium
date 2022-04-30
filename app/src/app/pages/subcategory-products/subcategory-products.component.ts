@@ -42,9 +42,9 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
             })
         );
         this.user = this.authService.getCurrentUserObject();
-        this.wishlistService.getWishlistProductIds(this.user).then(likedProducts => {
-          this.userLikedProducts = likedProducts
-        })
+        this.subscriptions.push(this.wishlistService.getWishlistProductIds(this.user).subscribe((products: string[]) => {
+          this.userLikedProducts = products;
+        }));
       }
     });
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom, Observable, of, map } from 'rxjs';
 import { NotificationsService } from 'src/app/notification/services/notifications.service';
 import { IProduct } from '../../interfaces/IProduct';
 import { IUser } from '../../interfaces/IUser';
@@ -65,29 +65,35 @@ export class WishlistService {
     this.loaderService.hide();
   }
 
-  async getWishlistProductIds(user: IUser | null): Promise<string[]> {
+  getWishlistProductIds(user: IUser | null): Observable<string[]> {
     if (user) {
       let productIds: string[] = [];
-      await firstValueFrom(
-        this.fireStore
-          .collection<any[]>(`users/${user?.uid}/wishlist`)
-          .valueChanges()
-      ).then((products: any[]) => {
-        products.forEach((p) => productIds.push(p.productId));
-      });
-      return productIds;
+      return this.fireStore
+        .collection<any>(`users/${user?.uid}/wishlist`)
+        .valueChanges()
+        .pipe(
+          map((products: any[]) => {
+            // console.log(products)
+            return Array.from(products.map((p: any) => p.productId))
+          })
+        );
     } else {
-      console.log(this.wishlist)
-      return this.wishlist;
+      // console.log(this.wishlist);
+      return of(this.wishlist);
     }
   }
 
-  getWishlistProductObjects(productIds: string[]): Observable<IProduct[]> {
+  async getWishlistProductObjects(productIds: string[]): Promise<IProduct[]> {
+    if (productIds.length > 0){
     console.log(`Favourites: ${productIds}`);
-    return this.fireStore
+    return await firstValueFrom(this.fireStore
       .collection<IProduct>(`products`, (ref) =>
         ref.where('uid', 'in', productIds)
       )
-      .valueChanges();
+      .valueChanges());
+    } else {
+      return [];
+    }
   }
+
 }
