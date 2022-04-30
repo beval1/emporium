@@ -37,6 +37,7 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
           this.productsService
             .getAllProductsForSubcategory(subcategoryId)
             .subscribe((products: IProduct[]) => {
+              products = products.filter(p => p.status=='active');
               this.filteredProducts = products;
               this.allProducts = products;
               this.minProductPrice = this.getMinProductPrice();
@@ -63,6 +64,9 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
   }
 
   private getMinProductPrice() {
+    if (this.filteredProducts.length == 0){
+      return 0;
+    }
     return this.filteredProducts.sort((a, b) => {
       if (a.price > b.price) {
         return 1;
@@ -73,6 +77,9 @@ export class SubcategoryProductsComponent implements OnInit, OnDestroy {
     })[0].price;
   }
   private getMaxProductPrice() {
+    if (this.filteredProducts.length == 0){
+      return 0;
+    }
     return this.filteredProducts.sort((a, b) => {
       if (a.price > b.price) {
         return 1;

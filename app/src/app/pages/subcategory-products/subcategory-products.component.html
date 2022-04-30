@@ -1,10 +1,14 @@
 <div class="container d-flex">
   <app-product-filter *ngIf="filteredProducts.length > 0" (priceChanged)="onPriceChange($event)" (orderChanged)="onOrderChange($event)" [minProductPrice]="minProductPrice" [maxProductPrice]="maxProductPrice"></app-product-filter>
-  <div class="">
-    <div class="products-wrapper d-flex flex-row flex-wrap">
+  <div *ngIf="filteredProducts.length > 0 then products; else noProducts"></div>
+  <ng-template #noProducts >
+    <h5>There aren't any products for this subcategory</h5>
+  </ng-template>
+  <ng-template #products class="">
+    <div class="products-wrapper d-flex flex-row flex-wrap justify-content-between">
       <div *ngFor="let product of filteredProducts">
         <app-product [product]="product" [liked]="isLiked(product.uid)"></app-product>
       </div>
     </div>
-  </div>
+  </ng-template>
 </div>

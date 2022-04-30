@@ -36,8 +36,8 @@ export class ProductComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.product?.name) {
-      if (this.product?.name.length > 74) {
-        this.productName = this.product.name.slice(0, 74) + '...';
+      if (this.product?.name.length > 63) {
+        this.productName = this.product.name.slice(0, 63) + '...';
       } else {
         this.productName = this.product?.name;
       }

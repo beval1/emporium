@@ -204,6 +204,18 @@ export class ProductService {
       .valueChanges();
   }
 
+  async getMultipleProductsById(productIds: string[]): Promise<IProduct[]> {
+    if (productIds.length > 0){
+    return await firstValueFrom(this.fireStore
+      .collection<IProduct>(`products`, (ref) =>
+        ref.where('uid', 'in', productIds)
+      )
+      .valueChanges());
+    } else {
+      return [];
+    }
+  }
+
   //doesn't work as expected - firebase has limited functionality, the search is CASE SENSITIVE and it works only if
   //the word starts with {searchValue}
   getAllProductsForSeller(

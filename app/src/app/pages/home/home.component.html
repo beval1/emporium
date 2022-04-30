@@ -1,1 +1,55 @@
-<a routerLink="/login">Login form</a>
+<div class="wrapper">
+  <ngb-carousel #carousel [interval]="3000" [pauseOnHover]="true" [pauseOnFocus]="false">
+    <ng-template ngbSlide *ngFor="let img of carouselImages; index as i">
+      <!-- <div class="carousel-caption">
+        <h3>My slide {{i + 1}} title</h3>
+      </div> -->
+      <a href="https://www.google.fr/?q=Number+{{i+1}}" target="_blank" rel="nofollow noopener noreferrer">
+        <div class="img-wrapper text-center">
+          <img class="carousel-image" [src]="img" alt="My image {{i + 1}} description">
+        </div>
+      </a>
+    </ng-template>
+  </ngb-carousel>
+
+  <div class="popular-products mt-4">
+    <h1>Popular products</h1>
+    <hr>
+    <div class="d-flex flex-row justify-content-between">
+      <div *ngFor="let product of popularProducts">
+        <app-product [product]="product"></app-product>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="benefits">
+    <h2 class="text-center mb-5">Why Choose Us?</h2>
+    <ul class="d-flex flex-row justify-content-between list-unstyled">
+      <li class="benefit">
+        <h5>Fast Delivery</h5>
+        <p></p>
+      </li>
+      <li class="benefit">
+        <h5>Rich Choice</h5>
+      </li>
+      <li class="benefit">
+        <h5>Money Back Guaranteed</h5>
+      </li>
+    </ul>
+  </div>
+
+  <div class="become-seller">
+    <h3>Become seller now and start expanding your bussiness</h3>
+  </div> -->
+
+  <div class="new-products">
+    <h1>New Products</h1>
+    <hr>
+    <div class="d-flex flex-row justify-content-between">
+    <div *ngFor="let product of newProducts">
+      <app-product [product]="product"></app-product>
+    </div>
+  </div>
+  </div>
+
+</div>

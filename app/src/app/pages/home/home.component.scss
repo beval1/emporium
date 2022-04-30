@@ -1,0 +1,19 @@
+.wrapper {
+  position: relative;
+  bottom: 23px;
+}
+.carousel-image {
+  height: 500px;
+  width: 1400px;
+  object-fit: cover;
+  margin: 0 auto;
+}
+.benefits {
+  background-color: #1D55C1;
+  position: absolute;
+  width: 100%;
+  overflow: visible;
+}
+.benefits > p, h5, h2 {
+  color: white
+}

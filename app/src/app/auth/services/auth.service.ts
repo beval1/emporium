@@ -237,12 +237,12 @@ export class AuthService {
   async signOut() {
     this.loaderService.show();
     console.log('logging out');
+    localStorage.clear();
     await this.fireAuth
       .signOut()
       .then(() => this.notificationsService.showSuccess('Logged out!'))
       .catch((error) => this.notificationsService.showError(error))
       .finally(() => this.loaderService.hide());
-    localStorage.clear();
     this.router.navigateByUrl('/');
   }
 
